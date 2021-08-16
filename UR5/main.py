@@ -2,8 +2,8 @@ import sys
 import time
 from IPython import embed
 
-from RobotLib import Robot
-from Plugin import Plugin
+from robot import Robot
+from samyplugin import Plugin
 
 # Interface python3 main.py -IP SAMYCore- -Plugin Port- -IP Robot- -PluginName-
 
