@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="01edc330-7949-4482-bf16-3d525c92117b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../SAMYPlugIn_UR/RobotLib/secmon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RobotLib/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/RobotLib/robot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin.py" beforeDir="false" afterPath="$PROJECT_DIR$/plugin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/CMakeLists.txt.user" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Robot/Robot.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Robot/include/Robot.h" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Robot/include/Robot.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/SAMYPlugin_Template.c" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/SAMYPlugin_Template.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/SAMYPlugin_Template.h" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/SAMYPlugin_Template.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/Publisher.c" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/Publisher.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/SAMYRobot.c" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/SAMYRobot.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/Subscriber.c" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/Subscriber.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/include/Publisher.h" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/include/Publisher.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/include/SAMYRobot.h" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/include/SAMYRobot.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/include/Subscriber.h" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/Communication/include/Subscriber.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/OPCUAModel/CRCL_OPCUA.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/OPCUAModel/CRCL_OPCUA.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/OPCUAModel/CRCL_OPCUA.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/CRCL_OPCUA.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/CRCL_OPCUA.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL.Classes.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL.Constants.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL.DataTypes.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL.NodeSet.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL.NodeSet2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL.NodeSet2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL.PredefinedNodes.uanodes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL.PredefinedNodes.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL.Types.bsd" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL.Types.bsd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL.Types.xsd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL_OPCUA.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL_OPCUA.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/Template_internals/OPCUA_CRCL/model/Published/CRCL_OPCUA.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/.cmake/api/v1/query/cache-v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/.cmake/api/v1/query/cmakeFiles-v1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/.cmake/api/v1/query/codemodel-v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/.cmake/api/v1/reply/cache-v2-2b3e3c76c2c957aac685.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/.cmake/api/v1/reply/cmakeFiles-v1-f9b8bbe0a110046015c8.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/.cmake/api/v1/reply/codemodel-v2-089b429cc0b0be8fe59e.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/.cmake/api/v1/reply/index-2021-02-04T08-40-26-0182.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/.cmake/api/v1/reply/target-SAMYPlugIn_Extruder-Debug-b0ea840f38b0b5bf74c6.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/.cmake/api/v1/reply/target-pref-ids-crcl_opcua-Debug-f9ed1f3e4eef66ea64a8.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/.cmake/api/v1/reply/target-pref-ns-crcl_opcua-Debug-e2bdf78fc1eefe73cec0.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/.cmake/api/v1/reply/target-pref-types-crcl_opcua-Debug-3fbd2511fe4d8bd5521c.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/3.16.3/CMakeCCompiler.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/3.16.3/CMakeCCompiler.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/3.16.3/CMakeCXXCompiler.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/3.16.3/CMakeCXXCompiler.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/3.16.3/CMakeDetermineCompilerABI_C.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/3.16.3/CMakeDetermineCompilerABI_C.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/3.16.3/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/3.16.3/CMakeDetermineCompilerABI_CXX.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/3.16.3/CMakeSystem.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/3.16.3/CMakeSystem.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/CMakeRuleHashes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/CMakeRuleHashes.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Base.dir/C.includecache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Base.dir/CXX.includecache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Base.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Base.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Base.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Base.dir/depend.internal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Base.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Base.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Base.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Base.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/DependInfo.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/cmake_clean.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/SAMYPlugIn_Extruder.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/TargetDirectories.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/TargetDirectories.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/pref-ids-crcl_opcua.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/pref-ids-crcl_opcua.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/pref-ns-crcl_opcua.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/pref-ns-crcl_opcua.dir/DependInfo.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/pref-ns-crcl_opcua.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/pref-ns-crcl_opcua.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/pref-types-crcl_opcua.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/pref-types-crcl_opcua.dir/DependInfo.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/pref-types-crcl_opcua.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/CMakeFiles/pref-types-crcl_opcua.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/SAMYPlugIn_Base.cbp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/SAMYPlugIn_Extruder" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/SAMYPlugIn_Extruder" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/SAMYPlugIn_Extruder.cbp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/crcl_opcua_nodeids.h" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/crcl_opcua_nodeids.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/namespace_crcl_opcua_generated.c" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/namespace_crcl_opcua_generated.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/types_crcl_opcua_generated.c" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/types_crcl_opcua_generated.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/types_crcl_opcua_generated.h" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/types_crcl_opcua_generated.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/types_crcl_opcua_generated_encoding_binary.h" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/types_crcl_opcua_generated_encoding_binary.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/types_crcl_opcua_generated_handling.h" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/build/src_generated/types_crcl_opcua_generated_handling.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_Extruder/main_Test_Unions_Local.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_UR/Readme.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_UR/RobotLib/exchangeData.py" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_UR/RobotLib/exchangeData.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_UR/RobotLib/realmon.py" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_UR/RobotLib/realmon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_UR/RobotLib/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_UR/RobotLib/robot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_UR/SAMYPlugIn_Base" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_UR/TransformLib/transform.py" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_UR/TransformLib/transform.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_UR/plugin.py" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_UR/plugin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SAMYPlugIn_UR/rtde/rtde.py" beforeDir="false" afterPath="$PROJECT_DIR$/../SAMYPlugIn_UR/rtde/rtde.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1kVO4RX6XJ3kTWVaVff9jc1BM8I" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="01edc330-7949-4482-bf16-3d525c92117b" name="Default Changelist" comment="" />
+      <created>1605782100628</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1605782100628</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/../.." />
+    </ignored-roots>
+  </component>
+</project>
