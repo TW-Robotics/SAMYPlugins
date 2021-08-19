@@ -14,6 +14,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update
 RUN apt install -y build-essential python3-pip
 RUN pip3 install numpy math3d scipy ipython pubsub pypubsub python-dateutil pytz lxml cryptography
+RUN pip3 install /home/felix/Desktop/SAMY/Git/SAMYPlugins_Templates/SAMYPlugins_Template_Python/dist/samyplugin-0.0.1-py3-none-any.whl
 
 ## copy files into image
 RUN mkdir /usr/src/samy
