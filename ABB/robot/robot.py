@@ -18,6 +18,7 @@ sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
 from pubsub import pub
 import samyplugin.CRCL_DataTypes
+from transform import transform
 from robot import connection
 
 import json
@@ -41,7 +42,7 @@ class RobotSettings:
         self.transSpeed = 0.1
         self.transAccel = 0.2
         self.radius = 0.0
-        self.workobject = ((971.03, 0, 100), (0, 0, 0, 1)) # [[1.090, 0, -0.070], [1, 0, 0, 0]] # values for printing station
+        self.workobject = ((0, -430, 250), (1,0,0,0)) #((971.03, 0, 100), (0, 0, 0, 1)) # [[1.090, 0, -0.070], [1, 0, 0, 0]] # values for printing station
         self.tool = (0, 0, 0, 1, 0, 0, 0) #(116.563, 2.09, 113.7, 0.707106781, 0, 0.707106781, 0)
 
 
@@ -85,17 +86,86 @@ class Robot:
 
 
     def move_to(self, data):
-        pass
+        pose = self.get_pose_from_crcl_position(data.EndPosition)
+        if data.MoveStraight:
+            self.set_cartesian(pose)
+            self.logger.info(pose)
+            self.compare_pose(pose[0], pose[1], pose[2])
+            print("Command with is finished")
+        else:
+            print("Not Implementet jet")
 
+    def move_through_to(self, data):
+        self.logger.info("Not Implementet")
+
+    def dwell(self, data):
+        self.logger.info("Not Implementet")
+
+    def send_status(self, data):
+        self.logger.info("Not Implementet")
+
+    def set_end_effector(self, data):
+        if data.Setting.fraction > 0.0:
+            self.set_do("do1", 1)
+        else:
+            self.set_do("do1", 0)
+
+    def set_trans_accel(self, data):
+        self.logger.info("Not Implementet")
+
+    def set_trans_speed(self, data):
+        if data.TransSpeed.switchField == 1:
+            self.set_speed(data.TransSpeed.unionValue.setting)
+            robot.robot_settings.transSpeed = data.TransSpeed.unionValue.setting
+        else:
+            self.logger.info("Setting transSpeed as fraction is not supported")
+
+    def set_length_units(self, data):
+        self.set_unit_linear(data.UnitName)
+
+    def stop_robot(self, data):
+        self.logger.info("Not Supported")
+
+    # =========================================================
+    #                   Helper Methods
+    # =========================================================
+
+    def get_pose_from_crcl_position(self, position):
+        pose = []
+        pose.append(position.point.x)
+        pose.append(position.point.y)
+        pose.append(position.point.z)
+        r, i, j, k = transform.matrix_to_quaternion(position.xAxis, position.zAxis)
+        pose.append(r)
+        pose.append(i)
+        pose.append(j)
+        pose.append(k)
+        return pose
 
     def get_state(self):
         return self.state
         pass
 
-    def stop_robot(self):
-        print("Stopping the ABB robot during move is not supported.")
-        pass
+    def compare_pose(self, x, y, z):
+        if self.live_mode == False:
+            return True
 
+        dif_pose = [10, 0, 0]
+        pose_reached = False
+        print("Python: comparing pose....")
+        while not pose_reached:
+            x_rob, y_rob, z_rob = self.get_cartesian()
+            dif_pose[0] = (abs(x_rob) - abs(x))
+            dif_pose[1] = (abs(y_rob) - abs(y))
+            dif_pose[2] = (abs(z_rob) - abs(z))
+            #print("Dif Pose:")
+            #print(dif_pose)
+            if abs(dif_pose[0]) < 0.5 and abs(dif_pose[1]) < 0.5 and abs(dif_pose[2]) < 0.5:
+                #print(dif_pose)
+                pose_reached = True
+                self.logger.info("Python: Pose reached")
+            time.sleep(0.1)
+        return pose_reached
 
     def set_unit_linear(self, linear):
         units_l = {"millimeters": 1.0,
@@ -120,7 +190,7 @@ class Robot:
         if not self.live_mode:
             return self.buffer_add(pose)
         print("Python: sending move command")
-        self.send_opcua(msg)
+        self.connection.send_opcua(msg)
 
     def set_joints(self, joints):
         """
@@ -133,13 +203,13 @@ class Robot:
         for joint in joints:
             msg += format(joint * self.scale_angle, "+08.2f") + " "
             msg += "#"
-        return self.send_opcua(msg)
+        return self.connection.send_opcua(msg)
 
     def get_cartesian(self):
         """
         Returns the current pose of the robot, in millimeters
         """
-        pose_string = self.opcua.currentTCP_node.get_value()
+        pose_string = self.connection.opcua.currentTCP_node.get_value()
         tcp = ast.literal_eval(pose_string)
         return tcp[0][0], tcp[0][1], tcp[0][2]
 
@@ -169,7 +239,7 @@ class Robot:
         """
         msg = "98 #"
         data = str(self.send(msg))[5:].split('*')
-        log.debug('get_robotinfo result: %s', str(data))
+        self.logger.debug('get_robotinfo result: %s', str(data))
         return data
 
     def set_tool(self, tool):
@@ -183,16 +253,16 @@ class Robot:
         """
         msg = "06 " + self.format_pose(tool)
         print("Python: sending set tool")
-        self.send_opcua(msg)
+        self.connection.send_opcua(msg)
 
     def load_json_tool(self, file_name):
         # if file_obj.__class__.__name__ == 'str':
         #    file_obj = open(filename, 'rb')
-        tool = check_coordinates(json.load(file_name))
+        tool = self.check_coordinates(json.load(file_name))
         self.set_tool(tool)
 
     def get_tool(self):
-        log.debug('get_tool returning: %s', str(self.robot_settings.tool))
+        self.logger.debug('get_tool returning: %s', str(self.robot_settings.tool))
         return self.robot_settings.tool
 
     def set_workobject(self, work_obj):
@@ -202,7 +272,7 @@ class Robot:
         """
         msg = "07 " + self.format_pose(work_obj)
         print("Python: sending set workobject")
-        self.send_opcua(msg)
+        self.connection.send_opcua(msg)
 
     def set_speed(self, speed):
         """
@@ -217,7 +287,7 @@ class Robot:
         msg += format(speed[2], "+08.1f") + " "
         msg += format(speed[3], "+08.2f") + " #"
         print("Python: sending set speed")
-        self.send_opcua(msg)
+        self.connection.send_opcua(msg)
 
     def set_zone(self, zone_key='z1', point_motion=True, manual_zone=[]):
         """
@@ -262,7 +332,7 @@ class Robot:
         msg += format(zone[1], "+08.4f") + " "
         msg += format(zone[2], "+08.4f") + " #"
         print("Python: sending set zone")
-        self.send_opcua(msg)
+        self.connection.send_opcua(msg)
 
     def buffer_add(self, pose):
         """
@@ -271,7 +341,7 @@ class Robot:
         """
         msg = "30 " + self.format_pose(pose)
         print("Python: sending buffer add")
-        self.send_opcua(msg)
+        self.connection.send_opcua(msg)
         time.sleep(0.01)
 
     def buffer_set(self, pose_list):
@@ -282,18 +352,18 @@ class Robot:
         for pose in pose_list:
             self.buffer_add(pose)
         if self.buffer_len == len(pose_list):
-            log.debug('Successfully added %i poses to remote buffer',
+            self.logger.debug('Successfully added %i poses to remote buffer',
                       len(pose_list))
             return True
         else:
-            log.warn('Failed to add poses to remote buffer!')
+            self.logger.warn('Failed to add poses to remote buffer!')
             self.clear_buffer()
             return False
 
     def clear_buffer(self):
         msg = "31 #"
         print("Python: sending clear buffer")
-        self.send_opcua(msg)
+        self.connection.send_opcua(msg)
         time.sleep(1)
         return
 
@@ -312,7 +382,7 @@ class Robot:
         global move_finished
         msg = "33 #"
         print("Python: sending buffer execute")
-        self.send_opcua(msg)
+        self.connection.send_opcua(msg)
         time.sleep(1)
         command_done = self.opcua.command_done_node.get_value()
         print(command_done)
@@ -330,7 +400,7 @@ class Robot:
         for axis in axis_values:
             msg += format(axis, "+08.2f") + " "
         msg += "#"
-        return self.send_opcua(msg)
+        return self.connection.send_opcua(msg)
 
     def move_circular(self, pose_onarc, pose_end):
         """
@@ -340,25 +410,25 @@ class Robot:
         msg_0 = "35 " + self.format_pose(pose_onarc)
         msg_1 = "36 " + self.format_pose(pose_end)
 
-        self.send_opcua(msg_0)
+        self.connection.send_opcua(msg_0)
         #data = self.send(msg_0).split()
         #if data[1] != '1':
-        #    log.warning('move_circular incorrect response, bailing!')
+        #    self.logger.warning('move_circular incorrect response, bailing!')
         #    return False
-        return self.send_opcua(msg_1)
+        return self.connection.send_opcua(msg_1)
 
-    def set_dio(self, value, id=0):
+    def set_do(self, io_name, setting ):
         """
-        A function to set a physical DIO line on the robot.
+        Set a physical DIO line on the robot.
         For this to work you're going to need to edit the RAPID function
         and fill in the DIO you want this to switch.
         """
-        msg = "97 " + str(int(bool(value))) + " #"
-        # return
-        return self.send_opcua(msg)
+        msg = "10 " + io_name + " " + str(int(bool(setting))) + " #"
+        self.logger.info(msg)
+        return self.connection.send_opcua(msg)
 
     def format_pose(self, pose):
-        pose = check_coordinates(pose)
+        pose = self.check_coordinates(pose)
         msg = ""
         for cartesian in pose[0]:
             msg += format(cartesian * self.scale_linear, "+08.1f") + " "
@@ -370,7 +440,7 @@ class Robot:
     def close(self):
         #self.sock.shutdown(socket.SHUT_RDWR)
         #self.sock.close()
-        log.info('Disconnected from ABB robot.')
+        self.logger.info('Disconnected from ABB robot.')
 
     def __enter__(self):
         return self
@@ -378,11 +448,10 @@ class Robot:
     def __exit__(self, type, value, traceback):
         self.close()
 
-
-def check_coordinates(coordinates):
-    if (len(coordinates) == 2) and (len(coordinates[0]) == 3) and (len(coordinates[1]) == 4):
-        return coordinates
-    elif len(coordinates) == 7:
-        return [coordinates[0:3], coordinates[3:7]]
-    log.warning('Recieved malformed coordinate: %s', str(coordinates))
-    raise NameError('Malformed coordinate!')
+    def check_coordinates(self, coordinates):
+        if (len(coordinates) == 2) and (len(coordinates[0]) == 3) and (len(coordinates[1]) == 4):
+            return coordinates
+        elif len(coordinates) == 7:
+            return [coordinates[0:3], coordinates[3:7]]
+        self.logger.warning('Recieved malformed coordinate: %s', str(coordinates))
+        raise NameError('Malformed coordinate!')

@@ -38,6 +38,7 @@ class RealTimeMonitor():
 
         try:
             self.real_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.real_socket.settimeout(1)
             self.real_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
             self.real_socket.connect((self.host, self.port))
         except:

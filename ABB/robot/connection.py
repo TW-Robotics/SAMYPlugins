@@ -3,6 +3,7 @@ from opcua import Client
 from samyplugin import CRCL_DataTypes
 
 import logging
+import time
 
 move_finished = False
 
@@ -43,7 +44,8 @@ class OPCUA:
         self.objects = self.client.get_objects_node()
         uri = "http://opcfoundation.org/UA/DI/"
         idx = 2 # self.client.get_namespace_index(uri)
-        alias_name = "IRB2400_1"
+        #alias_name = "IRB2400_1"
+        alias_name = "IRB120"
         #alias_name = "Robot_SIM"
 
         self.string_node = self.root.get_child(["0:Objects", "{}:IRC5".format(idx),
@@ -79,6 +81,7 @@ class Connection():
         fh = logging.StreamHandler()
         fh.setFormatter(logging.Formatter("%(levelname)s %(filename)s - %(message)s"))
         self.logger.addHandler(fh)
+        self.count = 0
 
         self.opcua = OPCUA(ipAddress)
 
@@ -97,24 +100,3 @@ class Connection():
             except:
                 print("Sending Failed -> trying again")
         print("Python: Command send over OPC UA")
-
-    def compare_pose(self, x, y, z):
-        if self.live_mode == False:
-            return True
-
-        dif_pose = [10, 0, 0]
-        pose_reached = False
-        print("Python: comparing pose....")
-        while not pose_reached:
-            x_rob, y_rob, z_rob = self.get_cartesian()
-            dif_pose[0] = (abs(x_rob) - abs(x))
-            dif_pose[1] = (abs(y_rob) - abs(y))
-            dif_pose[2] = (abs(z_rob) - abs(z))
-            print("Dif Pose:")
-            print(dif_pose)
-            if abs(dif_pose[0]) < 0.5 and abs(dif_pose[1]) < 0.5 and abs(dif_pose[2]) < 0.5:
-                print(dif_pose)
-                pose_reached = True
-                print("Python: Pose reached")
-            time.sleep(0.1)
-        return pose_reached

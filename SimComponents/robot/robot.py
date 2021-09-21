@@ -10,7 +10,7 @@ sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 from pubsub import pub
 import samyplugin.CRCL_DataTypes
 
-from opcua import Server
+from opcua import Client
 
 
 class SubHandler(object):
@@ -38,7 +38,7 @@ class Robot(object):
         self.logger.addHandler(fh)
 
         self.host = host
-        self.opcua_server = None
+        self.opcua_plc_client = None
         self.idx = None
         self.cylinder_node = None
         self.conveyor_parts_node = None
@@ -46,63 +46,65 @@ class Robot(object):
         self.sensor_node = None
         self.handler = None
         # Subscribe to the CRCL command topics
-        pub.subscribe(self.start_device, "EnableGripperCommand")
-        pub.subscribe(self.stop_device, "DisableGripperCommand")
-
-
+        pub.subscribe(self.enable_device, "EnableGripper")
+        pub.subscribe(self.disable_device, "DisableGripper")
 
     # Add robot specific methodes here:
 
-    def create_opcua_server(self):
-        self.opcua_server = Server()
-        self.opcua_server.set_endpoint("opc.tcp://0.0.0.0:4840/PLC/")
-        self.opcua_server.set_server_name("PLC sim Server")
+    def connect_to_plc(self):
+        while True:
+            try:
+                # Create opcua client connection with SAMYCore
+                self.logger.info("Connecting to PLC OPCUA Server")
+                address = ("opc.tcp://{}:{}/PLC/)").format(self.host, 4842)
+                self.logger.info(address)
+                self.opcua_plc_client = Client(address)
+                self.opcua_plc_client.connect()
+                self.logger.info("Connected to PLC")
+                break
+            except:
+                self.logger.info("Connection with PLC failed!!!!!\n Retry in 3 seconds....")
+                self.logger.error("Error:", exc_info=True)
+                time.sleep(3)
+        self.opcua_plc_client.load_type_definitions()
 
-        uri = "http://examples.freeopcua.github.io"
-        self.idx = self.opcua_server.register_namespace(uri)
+    def get_nodes(self):
+        root = self.opcua_plc_client.get_root_node()
+        objects = self.opcua_plc_client.get_objects_node()
 
-    def create_nodes(self):
-        objects = self.opcua_server.get_objects_node()
-        plc_object = objects.add_object(self.idx, "PLC_Nodes")
-        self.cylinder_node = plc_object.add_variable(self.idx, "Cylinder", False)
-        self.conveyor_parts_node = plc_object.add_variable(self.idx, "ConveyorParts", False)
-        self.conveyor_holder_node = plc_object.add_variable(self.idx, "ConveyorHolder", False)
-        self.sensor_node = plc_object.add_variable(self.idx, "Sensor", False)
-        self.cylinder_node.set_writable()
-        self.conveyor_parts_node.set_writable()
-        self.conveyor_holder_node.set_writable()
-        self.sensor_node.set_writable()
-
-    def start_server(self):
-        self.opcua_server.start()
+        self.conveyor_holder_node = objects.get_child(["3:PLC_Nodes", "3:ConveyorHolder"])
+        self.conveyor_parts_node = objects.get_child(["3:PLC_Nodes", "3:ConveyorParts"])
+        self.cylinder_node = objects.get_child(["3:PLC_Nodes", "3:Cylinder"])
+        self.sensor_node = objects.get_child(["3:PLC_Nodes", "3:Sensor"])
 
     def subscribe_to_sensor(self):
         self.handler = SubHandler()
-        sub = self.opcua_server.create_subscription(100, self.handler)
+        sub = self.opcua_plc_client.create_subscription(100, self.handler)
         handle = sub.subscribe_data_change(self.sensor_node)
 
-    def start_device(self, data):
+    def enable_device(self, data):
+        self.logger.info("GripperName = {}".format(data.GripperName))
         if data.GripperName == "cylinder":
+            self.logger.info("Setting Cylinder to TRUE")
             self.cylinder_node.set_value(True)
-            pub.sendMessage("command_finished")
         elif data.GripperName == "conveyor_parts":
             self.conveyor_parts_node.set_value(True)
-            pub.sendMessage("command_finished")
         elif data.GripperName == "conveyor_holder":
             self.conveyor_holder_node.set_value(True)
-            pub.sendMessage("command_finished")
         else:
-            pub.sendMessage("command_error")
+            self.logger.info("No device with this name")
+            #pub.sendMessage("command_error")
+        time.sleep(0.5)
+        self.logger.info("Enable device finished")
 
-    def stop_device(self, data):
+    def disable_device(self, data):
+        self.logger.info("GripperName = {}".format(data.GripperName))
         if data.GripperName == "cylinder":
             self.cylinder_node.set_value(False)
-            pub.sendMessage("command_finished")
         elif data.GripperName == "conveyor_parts":
             self.conveyor_parts_node.set_value(False)
-            pub.sendMessage("command_finished")
         elif data.GripperName == "conveyor_holder":
             self.conveyor_holder_node.set_value(False)
-            pub.sendMessage("command_finished")
         else:
-            pub.sendMessage("command_error")
+            self.logger.info("No device with this name")
+            #pub.sendMessage("command_error")

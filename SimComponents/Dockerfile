@@ -13,12 +13,12 @@ ENV IP_ADDRESS=172.0.0.2
 RUN apt update
 RUN apt install -y python3 build-essential python3-pip
 RUN pip3 install ipython python-dateutil pytz lxml cryptography pypubsub numpy
-RUN pip3 install /home/felix/Desktop/SAMY/Git/SAMYPlugins_Templates/SAMYPlugins_Template_Python/dist/samyplugin-0.0.1-py3-none-any.whl
 
 ## copy files into image
 RUN mkdir /usr/src/samy
 WORKDIR /usr/src/samy
 COPY . ./
+RUN pip3 install samyplugin-0.0.2-py3-none-any.whl
 
 ## start plugin (get ip address from docker)
 

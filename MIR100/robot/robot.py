@@ -3,6 +3,7 @@ import logging
 import requests
 import json
 from pubsub import pub
+import time
 
 
 class Robot(object):
@@ -25,7 +26,16 @@ class Robot(object):
         self.headers["Accept_language"] = "en_US"
 
         print("\nMake First request\n")
-        self.missions = requests.get(self.url + "missions", headers=self.headers)
+        while(True):
+            try:
+                self.missions = requests.get(self.url + "missions", headers=self.headers)
+                self.logger.info("\nList of available missions:")
+                self.logger.info(self.missions)
+                self.logger.info(self.missions[1])
+                break
+            except:
+                self.logger.info("No connection to the robot.\nRetry in 3 sec.")
+                time.sleep(3)
 
         pub.subscribe(self.start_mission, "Message")
 

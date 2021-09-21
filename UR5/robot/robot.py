@@ -14,7 +14,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
 from pubsub import pub
-import CRCL_DataTypes
+import samyplugin.CRCL_DataTypes
 
 from robot import realmon
 from robot import exchangeData
@@ -44,7 +44,7 @@ class RobotSettings:
         self.transSpeed = 200
         self.transAccel = 0.2
         self.radius = 0.0
-        self.workobject = [[400, 0, 150],[0, 0, 0]]  # in mm and rad [[-110, 350, 250],[3.14, -3.14, 0]], [[-560, -40, -195], [0, 0, 0]]
+        self.workobject = [[-10, 405, 115],[0, 0, 0]]  # in mm and rad [[-110, 350, 250],[3.14, -3.14, 0]], [[-560, -40, -195], [0, 0, 0]]
         self.workobject_m3d = m3d.Transform(m3d.Orientation.new_rotation_vector((
             self.workobject[1][0], self.workobject[1][1], self.workobject[1][2])),
             m3d.Vector(self.workobject[0][0], self.workobject[0][1], self.workobject[0][2]))
@@ -67,10 +67,17 @@ class Robot(object):
         self.host = host
 
         # create the socket connections to the robot
-        self.real_mon = realmon.RealTimeMonitor(self.host)
-        self.rtde = exchangeData.ExchangeData(self.host)
-        logging.getLogger("rtde").setLevel(logging.DEBUG)
-        self.dash = dashboard_server.Dashboard(self.host)
+        while(True):
+            try:
+                self.real_mon = realmon.RealTimeMonitor(self.host)
+                self.rtde = exchangeData.ExchangeData(self.host)
+                logging.getLogger("rtde").setLevel(logging.DEBUG)
+                self.dash = dashboard_server.Dashboard(self.host)
+                break
+            except:
+                self.logger.info("No connection to Robot.\nRetry in 3 seconds.... ")
+                time.sleep(3)
+
 
         self.robot_settings = RobotSettings()
         self.scale_linear = 0.001
@@ -95,7 +102,7 @@ class Robot(object):
         pub.subscribe(self.set_length_units, "SetLengthUnits")
         pub.subscribe(self.stop_robot, "StopMotion")
 
-        self.logger.info("Connected")
+        self.logger.info("Connected to Robot")
 
     # =========================================================
     #                   CRCL Methods
@@ -110,6 +117,7 @@ class Robot(object):
             self.movel(pose, self.robot_settings.transAccel, self.robot_settings.transSpeed, 0)
         else:
             self.movej_p(pose, self.robot_settings.rotAccel, self.robot_settings.rotSpeed, 0, 0)
+        self.compare_pose(pose[0], pose[1], pose[2])
 
     def move_through_to(self, data):
         for waypoint in data.Waypoint:
@@ -206,11 +214,15 @@ class Robot(object):
             pose_reached = False
             self.logger.info("Python: comparing pose....")
             while not pose_reached:
-                rob_pose = self.get_actual_tcp()
+                #self.logger.info("Getting new pose from Robot")
+                try:
+                    rob_pose = self.get_actual_tcp()
+                except:
+                    self.real_mon = realmon.RealTimeMonitor(self.host)
                 dif_pose[0] = (abs(rob_pose[0]) - abs(self.pose_goal[0])*1000)
                 dif_pose[1] = (abs(rob_pose[1]) - abs(self.pose_goal[1])*1000)
                 dif_pose[2] = (abs(rob_pose[2]) - abs(self.pose_goal[2])*1000)
-                #print("Rob Pose: {} || Dif Pose: {} || Goal: {}".format(rob_pose, dif_pose, self.pose_goal))
+                #self.logger.info("Rob Pose: {} || Dif Pose: {} || Goal: {}".format(rob_pose, dif_pose, self.pose_goal))
                 if abs(dif_pose[0]) < 0.5 and abs(dif_pose[1]) < 0.5 and abs(dif_pose[2]) < 0.5:
                     pose_reached = True
                     self.logger.info("Python: Pose reached")
@@ -436,7 +448,8 @@ class Robot(object):
             relative to the workobject.
             It uses the RTDE interface.
         """
-        pose = self.rtde.get_actual_tcp()
+        pose = self.real_mon.get_actual_tcp()
+        self.logger.info(pose)
         # adjust pose to workobject
         pose[0] = pose[0] / self.scale_linear# - self.robot_settings.workobject[0][0]
         pose[1] = pose[1] / self.scale_linear# - self.robot_settings.workobject[0][1]
@@ -451,7 +464,7 @@ class Robot(object):
             base coordinate system.
             It uses the RTDE interface.
         """
-        pose = self.rtde.get_actual_tcp()
+        pose = self.real_mon.get_actual_tcp()
         # adjust pose to workobject
         pose[0] = pose[0] / self.scale_linear# - self.robot_settings.workobject[0][0]
         pose[1] = pose[1] / self.scale_linear# - self.robot_settings.workobject[0][1]
@@ -543,7 +556,7 @@ class Robot(object):
         if self.live_mode == False:
             self.send_command(line2)
         else:
-            time.sleep(4)
+            time.sleep(1)
         #self.send_command(line2)
 
     def move_gripper(self, position, num=1):
