@@ -23,7 +23,7 @@ RUN mkdir /usr/src/samy
 WORKDIR /usr/src/samy
 COPY . ./
 # build and install open62541
-RUN rm -r open62541_v1.2_unions_fixed/build
+RUN rm -r -f open62541_v1.2_unions_fixed/build # I had to add the -f flag, otherwise thrown error if the folder was not present
 RUN mkdir open62541_v1.2_unions_fixed/build
 WORKDIR open62541_v1.2_unions_fixed/build
 RUN cmake -DUA_NAMESPACE_ZERO=FULL \
