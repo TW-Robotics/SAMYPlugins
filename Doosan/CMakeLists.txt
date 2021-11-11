@@ -24,7 +24,8 @@ include_directories("${PROJECT_SOURCE_DIR}/ThirdParty/SAMY/Communication/include
                     "${PROJECT_SOURCE_DIR}/ThirdParty/SAMY/OPCUA_CRCL/include"
                     "${PROJECT_SOURCE_DIR}/ThirdParty/SAMY/OPCUA_CRCL/include/open62541/plugin"
                     "${PROJECT_SOURCE_DIR}/ThirdParty/SAMY/OPCUA_CRCL/plugins/"
-                    "${PROJECT_SOURCE_DIR}/build/src_generated")
+#                    "${PROJECT_SOURCE_DIR}/build/src_generated")
+                    )
 
 # The generated files are: "namespace_${NAMESPACE_NAME}_... .c/.h"
  set(NAMESPACE_NAME_CRCL "crcl")
