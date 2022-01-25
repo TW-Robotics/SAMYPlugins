@@ -34,15 +34,17 @@ class RobotSettings:
         self.max_rot_speed = 3.14
         self.max_rot_accel = 3.14
 
-        self.lengthUnit = "millimeters"
+        self.lengthUnit = "meters"
         self.angleUnit = "degrees"
         self.forceUnit = "newton"
+        self.scale_linear = None; # Will be set at startup according to lengthUnit
+        self.scale_angle = None; # Will be set at startup according to angleUnit
         self.rotSpeed = 2.0
         self.rotAccel = 0.3
         self.transSpeed = 0.1
         self.transAccel = 0.2
         self.radius = 0.0
-        self.workobject = ((0, -430, 250), (1,0,0,0)) #((971.03, 0, 100), (0, 0, 0, 1)) # [[1.090, 0, -0.070], [1, 0, 0, 0]] # values for printing station
+        self.workobject = ((0.0, -0.430, 0.250), (1,0,0,0)) #((971.03, 0, 100), (0, 0, 0, 1)) # [[1.090, 0, -0.070], [1, 0, 0, 0]] # values for printing station
         self.tool = (0, 0, 0, 1, 0, 0, 0) #(116.563, 2.09, 113.7, 0.707106781, 0, 0.707106781, 0)
 
 
@@ -93,10 +95,29 @@ class Robot:
             self.compare_pose(pose[0], pose[1], pose[2])
             print("Command with is finished")
         else:
-            print("Not Implementet jet")
+            self.logger.error("Not Implementet jet")
 
     def move_through_to(self, data):
         self.logger.info("Not Implementet")
+        # x = 1
+        # if move_straight:
+        #     for waypoint in waypoints:
+        #         pose = transform.get_pose_euler(waypoint)
+        #         if x == num_positions:
+        #             robot.rob.movel(command_id, pose, robot.transAccel, robot.transSpeed, 0)
+        #         else:
+        #             robot.rob.movel(command_id, pose, robot.robot_settings.transAccel, robot.robot_settings.transSpeed,
+        #                             robot.robot_settings.radius)
+        #         x += 1
+        # else:
+        #     for waypoint in waypoints:
+        #         pose = transform.get_pose_euler(waypoint)
+        #         if x == num_positions:
+        #             robot.rob.movej_p(command_id, pose, robot.transAccel, robot.transSpeed, 0, 0)
+        #         else:
+        #             robot.rob.movej_p(command_id, pose, robot.robot_settings.transAccel, robot.robot_settings.transSpeed, 0,
+        #                               robot.robot_settings.radius)
+        #         x += 1
 
     def dwell(self, data):
         self.logger.info("Not Implementet")
@@ -109,6 +130,7 @@ class Robot:
             self.set_do("do1", 1)
         else:
             self.set_do("do1", 0)
+        time.sleep(1)
 
     def set_trans_accel(self, data):
         self.logger.info("Not Implementet")
@@ -131,6 +153,12 @@ class Robot:
     # =========================================================
 
     def get_pose_from_crcl_position(self, position):
+        """
+        Get CRCL pose and change its format to simple python list
+        and use quaternions for rotation: (units are not changed)
+        [x, y, z, r, i, j, k]
+        """
+
         pose = []
         pose.append(position.point.x)
         pose.append(position.point.y)
@@ -147,23 +175,26 @@ class Robot:
         pass
 
     def compare_pose(self, x, y, z):
+        """
+        Compares the goal pose with the current pose. Both have to be in meters.
+        """
         if self.live_mode == False:
             return True
 
-        dif_pose = [10, 0, 0]
+        dif_pose = [0.10, 0, 0]
         pose_reached = False
-        print("Python: comparing pose....")
+        print("ABB: comparing pose....")
         while not pose_reached:
-            x_rob, y_rob, z_rob = self.get_cartesian()
+            x_rob, y_rob, z_rob = self.get_cartesian() # Gets the pose from the robot. Retrun values are in meters
             dif_pose[0] = (abs(x_rob) - abs(x))
             dif_pose[1] = (abs(y_rob) - abs(y))
             dif_pose[2] = (abs(z_rob) - abs(z))
-            #print("Dif Pose:")
-            #print(dif_pose)
-            if abs(dif_pose[0]) < 0.5 and abs(dif_pose[1]) < 0.5 and abs(dif_pose[2]) < 0.5:
+            print("Dif Pose:")
+            print(dif_pose)
+            if abs(dif_pose[0]) < 0.005 and abs(dif_pose[1]) < 0.005 and abs(dif_pose[2]) < 0.005:
                 #print(dif_pose)
                 pose_reached = True
-                self.logger.info("Python: Pose reached")
+                self.logger.info("ABB: Pose reached")
             time.sleep(0.1)
         return pose_reached
 
@@ -211,7 +242,7 @@ class Robot:
         """
         pose_string = self.connection.opcua.currentTCP_node.get_value()
         tcp = ast.literal_eval(pose_string)
-        return tcp[0][0], tcp[0][1], tcp[0][2]
+        return tcp[0][0] / self.scale_linear, tcp[0][1] / self.scale_linear, tcp[0][2] / self.scale_linear
 
     def get_joints(self):
         """
@@ -428,6 +459,12 @@ class Robot:
         return self.connection.send_opcua(msg)
 
     def format_pose(self, pose):
+        """
+        Change the format of the pose to the right unit and add the strings so
+        RAPID can understand them.
+        Input pose: [x, y, z, i, j, k]
+        Output: " x+08.1f y+08.1f z+08.1f r+08.5f i+08.5f j+08.5f k+08.5f"
+        """
         pose = self.check_coordinates(pose)
         msg = ""
         for cartesian in pose[0]:

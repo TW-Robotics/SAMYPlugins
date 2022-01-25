@@ -42,28 +42,32 @@ class OPCUA:
         # Create nodes
         self.root = self.client.get_root_node()
         self.objects = self.client.get_objects_node()
-        uri = "http://opcfoundation.org/UA/DI/"
-        idx = 2 # self.client.get_namespace_index(uri)
+        self.namespaces = self.get_namespaces(self.client)
+        ns_controller = self.namespaces["https://abb.com/Robotics/UA/Controller/"]
+        ns_objects = self.namespaces["http://abb.com/Robotics/UA/Controller/Objects"]
+        ns_di = self.namespaces["http://opcfoundation.org/UA/DI/"]
         #alias_name = "IRB2400_1"
         alias_name = "IRB120"
         #alias_name = "Robot_SIM"
 
-        self.string_node = self.root.get_child(["0:Objects", "{}:IRC5".format(idx),
-                                                "{}:{}".format(idx, alias_name), "{}:RAPID".format(idx),
-                                                "{}:T_ROB1".format(idx), "{}:SERVER".format(idx),
-                                                "{}:receivedString".format(idx)])
-        self.wait_for_command_node = self.root.get_child(["0:Objects", "{}:IRC5".format(idx),
-                                                "{}:{}".format(idx, alias_name), "{}:RAPID".format(idx),
-                                                "{}:T_ROB1".format(idx), "{}:SERVER".format(idx),
-                                                "{}:wait_for_command".format(idx)])
-        self.command_done_node = self.root.get_child(["0:Objects", "{}:IRC5".format(idx),
-                                                "{}:{}".format(idx, alias_name), "{}:RAPID".format(idx),
-                                                "{}:T_ROB1".format(idx), "{}:SERVER".format(idx),
-                                                "{}:command_done".format(idx)])
-        self.currentTCP_node = self.root.get_child(["0:Objects", "{}:IRC5".format(idx),
-                                                      "{}:{}".format(idx, alias_name), "{}:RAPID".format(idx),
-                                                      "{}:reportTCP".format(idx), "{}:report_tcp".format(idx),
-                                                      "{}:currentTCP".format(idx)])
+        path = ["0:Objects", "{}:Robots".format(ns_controller),
+                "{}:{}".format(ns_objects, alias_name), "{}:RAPID".format(ns_controller),
+                "{}:T_ROB1".format(ns_objects), "{}:SERVER".format(ns_objects),
+                "{}:receivedString".format(ns_objects)]
+        print(path)
+        self.string_node = self.root.get_child(path)
+        self.wait_for_command_node = self.root.get_child(["0:Objects", "{}:Robots".format(ns_controller),
+                                                "{}:{}".format(ns_objects, alias_name), "{}:RAPID".format(ns_controller),
+                                                "{}:T_ROB1".format(ns_objects), "{}:SERVER".format(ns_objects),
+                                                "{}:wait_for_command".format(ns_objects)])
+        self.command_done_node = self.root.get_child(["0:Objects", "{}:Robots".format(ns_controller),
+                                                "{}:{}".format(ns_objects, alias_name), "{}:RAPID".format(ns_controller),
+                                                "{}:T_ROB1".format(ns_objects), "{}:SERVER".format(ns_objects),
+                                                "{}:command_done".format(ns_objects)])
+        self.currentTCP_node = self.root.get_child(["0:Objects", "{}:Robots".format(ns_controller),
+                                                "{}:{}".format(ns_objects, alias_name), "{}:RAPID".format(ns_controller),
+                                                "{}:T_ROB1".format(ns_objects), "{}:SERVER".format(ns_objects),
+                                                "{}:currentTCP".format(ns_objects)])
         print("Python: OPC UA Nodes created")
         #except:
         #    print("Python: OPC UA connection failed")
@@ -72,6 +76,16 @@ class OPCUA:
         handler = SubHandler()
         sub = client.create_subscription(500, handler)
         handle = sub.subscribe_data_change(self.command_done_node)
+
+    def get_namespaces(self, client):
+        namespaces = {}
+        root_node = client.get_root_node()
+        browse_path = ["0:Objects", "0:Server", "0:NamespaceArray"]
+        namespaceArrayNode = root_node.get_child(browse_path)
+        namespacesValue = namespaceArrayNode.get_value()
+        for i, namespace in enumerate(namespacesValue):
+            namespaces[namespace] = i
+        return namespaces
 
 class Connection():
     def __init__(self, ipAddress):

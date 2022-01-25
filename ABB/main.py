@@ -18,6 +18,7 @@ if __name__ == "__main__":
     robot_object = Robot(sys.argv[3])
 
     plugin_object.connect_to_core(sys.argv[1], 4840)
+    plugin_object.get_information_source_nodes()
     plugin_object.subscribe_to_core(sys.argv[2])
 
     plugin_object.disconnect_core()
