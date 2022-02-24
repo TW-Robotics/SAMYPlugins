@@ -39,17 +39,17 @@ class RobotSettings:
         self.forceUnit = "newton"
         self.scale_linear = None; # Will be set at startup according to lengthUnit
         self.scale_angle = None; # Will be set at startup according to angleUnit
-        self.rotSpeed = 2.0
-        self.rotAccel = 0.3
-        self.transSpeed = 0.1
-        self.transAccel = 0.2
+        self.rotSpeed = 3.0
+        self.rotAccel = 0.4
+        self.transSpeed = 0.2
+        self.transAccel = 0.3
         self.radius = 0.0
-        self.workobject = ((0.0, -0.430, 0.250), (1,0,0,0)) #((971.03, 0, 100), (0, 0, 0, 1)) # [[1.090, 0, -0.070], [1, 0, 0, 0]] # values for printing station
+        self.workobject = ((0.015, -0.475, 0.257), (1,0,0,0)) #((971.03, 0, 100), (0, 0, 0, 1)) # [[1.090, 0, -0.070], [1, 0, 0, 0]] # values for printing station
         self.tool = (0, 0, 0, 1, 0, 0, 0) #(116.563, 2.09, 113.7, 0.707106781, 0, 0.707106781, 0)
 
 
 class Robot:
-    def __init__(self, ipAddress):
+    def __init__(self, robot_settings):
 
         # create a logger for the robot object
         self.logger = logging.getLogger(__name__)
@@ -58,7 +58,7 @@ class Robot:
         fh.setFormatter(logging.Formatter("%(levelname)s %(filename)s - %(message)s"))
         self.logger.addHandler(fh)
         self.robot_settings = RobotSettings()
-        self.connection = connection.Connection(ipAddress)
+        self.connection = connection.Connection(robot_settings["Address"])
 
         self.state = "STOPPED"
         self.live_mode = True
@@ -181,7 +181,7 @@ class Robot:
         if self.live_mode == False:
             return True
 
-        dif_pose = [0.10, 0, 0]
+        dif_pose = [0.01, 0, 0]
         pose_reached = False
         print("ABB: comparing pose....")
         while not pose_reached:

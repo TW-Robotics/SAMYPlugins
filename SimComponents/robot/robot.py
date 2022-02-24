@@ -54,7 +54,7 @@ class Robot(object):
     def connect_to_plc(self):
         while True:
             try:
-                # Create opcua client connection with SAMYCore
+                # Create opcua client connection with PLC OPCUA Server
                 self.logger.info("Connecting to PLC OPCUA Server")
                 address = ("opc.tcp://{}:{}/PLC/)").format(self.host, 4842)
                 self.logger.info(address)
@@ -88,20 +88,24 @@ class Robot(object):
             self.logger.info("Setting Cylinder to TRUE")
             self.cylinder_node.set_value(True)
         elif data.GripperName == "conveyor_parts":
+            self.logger.info("Setting conveyor parts to TRUE")
             self.conveyor_parts_node.set_value(True)
         elif data.GripperName == "conveyor_holder":
+            self.logger.info("Setting conveyor holder to TRUE")
             self.conveyor_holder_node.set_value(True)
         else:
             self.logger.info("No device with this name")
             #pub.sendMessage("command_error")
-        time.sleep(0.5)
+        #time.sleep(0.5)
         self.logger.info("Enable device finished")
 
     def disable_device(self, data):
         self.logger.info("GripperName = {}".format(data.GripperName))
         if data.GripperName == "cylinder":
+            self.logger.info("Setting Cylinder to FALSE")
             self.cylinder_node.set_value(False)
         elif data.GripperName == "conveyor_parts":
+            self.logger.info("Setting conveyor parts to FALSE")
             self.conveyor_parts_node.set_value(False)
         elif data.GripperName == "conveyor_holder":
             self.conveyor_holder_node.set_value(False)

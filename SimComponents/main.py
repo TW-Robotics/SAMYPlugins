@@ -22,6 +22,7 @@ if __name__ == "__main__":
     robot_object.subscribe_to_sensor()
 
 
+
     plugin_object.connect_to_core(sys.argv[1], 4840)
     plugin_object.subscribe_to_core(sys.argv[2])
 
