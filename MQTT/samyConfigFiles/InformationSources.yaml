@@ -1,11 +1,15 @@
 InformationSources:
   - InformationSource:
-      InformationSourceName: "LightBarrier"
+      InformationSourceName: "LightBarrierSensor"
       DataTypes:
              - Boolean
   - InformationSource:
       InformationSourceName: "DistanceSensor"
       DataTypes:
              - Double
+  - InformationSource:
+      InformationSourceName: "InductiveSensor"
+      DataTypes:
+             - Boolean
 
 

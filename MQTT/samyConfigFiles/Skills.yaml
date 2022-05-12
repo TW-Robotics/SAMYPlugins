@@ -3,4 +3,9 @@ FundamentalSkills: # Fundamental skills are only composed by CRCL commands
          SkillName: CheckStorage
          CRCLCommands:
              - GetStatus
+   - FundamentalSkill:
+         SkillName: SetActuators
+         CRCLCommands:
+             - ActuateJoints
+
 

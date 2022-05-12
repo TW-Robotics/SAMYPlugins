@@ -22,3 +22,5 @@ if __name__ == "__main__":
     plugin_object.subscribe_to_core(sys.argv[2])
 
     plugin_object.disconnect_core()
+    print("Stopping Mqtt Server")
+    robot_object.mqtt.stop_mqtt_server()
