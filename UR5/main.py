@@ -12,7 +12,7 @@ if __name__ == "__main__":
         print("\"address of SAMYCore\" \"RobotName\" Optional: \"Path to settings\"")
         sys.exit(1)
     elif len(sys.argv) > 3:
-        plugin_object.set_settings_path(sys.argv[4])
+        plugin_object.set_settings_path(sys.argv[3])
 
     robot_settings = plugin_object.get_robot_settings(sys.argv[2])
     robot_object = SAMY_Robot(robot_settings)

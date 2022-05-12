@@ -19,4 +19,6 @@ RUN pip3 install numpy math3d scipy ipython pypubsub python-dateutil pytz lxml c
 RUN mkdir /usr/src/samy
 WORKDIR /usr/src/samy
 COPY . ./
-RUN pip3 install samyplugin-0.0.2-py3-none-any.whl
+## Install custom opcua package and saymplugin package
+RUN pip3 install pip/opcua-0.98.13-py3-none-any.whl 
+RUN pip3 install pip/samyplugin-0.2-py3-none-any.whl
