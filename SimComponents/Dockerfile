@@ -18,12 +18,6 @@ RUN pip3 install ipython python-dateutil pytz lxml cryptography pypubsub numpy
 RUN mkdir /usr/src/samy
 WORKDIR /usr/src/samy
 COPY . ./
-RUN pip3 install samyplugin-0.0.2-py3-none-any.whl
-
-## start plugin (get ip address from docker)
-
-EXPOSE 4840
-
-#ENTRYPOINT ["tail"]
-#CMD ["-f","/dev/null"]
-CMD python3 /usr/src/samy/main.py core
+## Install custom opcua package and saymplugin package
+RUN pip3 install pip/opcua-0.98.13-py3-none-any.whl 
+RUN pip3 install pip/samyplugin-0.2-py3-none-any.whl
