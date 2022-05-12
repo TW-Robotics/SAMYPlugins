@@ -1,0 +1,34 @@
+Robots:
+  - Robot:
+      Name: MqttPlugin
+      ID: 12344
+      Address: "10.0.0.23"
+      IOLinkAddress: "10.0.0.25"
+      MQTTPort: 2222
+      Sensors:
+        - Sensor:
+          Name: InductiveSensor
+          Port: 6
+          Type: DI
+        - Sensor:
+          Name: LightBarrierSensor
+          Port: 1
+          Type: DI
+        - Sensor:
+          Name: DistanceSensor
+          Port: 3
+          Type: IO-Link
+      # MQTT:
+      #   - Subscription:
+      #     Topic: sensors/lightbarrier
+      #     Data: "00-02-01-68-84-e3/iolinkmaster/port[1]/pin2in"
+      #   - Subscription:
+      #     Topic: sensors/distance
+      #     Data: "00-02-01-68-84-e3/iolinkmaster/port[3]/iolinkdevice/pdin"
+      #   - Subscription:
+      #     Topic: sensors/inductive
+      #     Data: "00-02-01-68-84-e3/iolinkmaster/port[6]/iolinkdevice/pdin"
+      OPCUARoboticsFile: RobotUR5.xml
+      Skills:
+         - CheckStorage
+         - SetActuators

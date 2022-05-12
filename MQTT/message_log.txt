@@ -1,0 +1,74 @@
+PUBSUB: New topic "command_reset" created
+PUBSUB: Subscribed listener "Plugin.send_command_reset" to topic "command_reset"
+PUBSUB: New topic "command_halt" created
+PUBSUB: Subscribed listener "Plugin.send_command_halt" to topic "command_halt"
+PUBSUB: New topic "command_error" created
+PUBSUB: Subscribed listener "Plugin.send_command_error" to topic "command_error"
+PUBSUB: New topic "command_suspend" created
+PUBSUB: Subscribed listener "Plugin.send_command_suspend" to topic "command_suspend"
+PUBSUB: New topic "write_information_source" created
+PUBSUB: Subscribed listener "Plugin.write_information_source" to topic "write_information_source"
+PUBSUB: New topic "Message" created
+PUBSUB: Subscribed listener "SAMY_Robot.popup" to topic "Message"
+PUBSUB: New topic "GetStatus" created
+PUBSUB: Subscribed listener "SAMY_Robot.get_status" to topic "GetStatus"
+PUBSUB: Start sending message of topic "GetStatus"
+PUBSUB: Sending message of topic "GetStatus" to listener SAMY_Robot.get_status
+PUBSUB: Start sending message of topic "write_information_source"
+PUBSUB: Sending message of topic "write_information_source" to listener Plugin.write_information_source
+PUBSUB: Done sending message of topic "write_information_source"
+PUBSUB: Start sending message of topic "write_information_source"
+PUBSUB: Sending message of topic "write_information_source" to listener Plugin.write_information_source
+PUBSUB: Done sending message of topic "write_information_source"
+PUBSUB: Done sending message of topic "GetStatus"
+PUBSUB: Start sending message of topic "command_reset"
+PUBSUB: Sending message of topic "command_reset" to listener Plugin.send_command_reset
+PUBSUB: Done sending message of topic "command_reset"
+PUBSUB: Start sending message of topic "GetStatus"
+PUBSUB: Sending message of topic "GetStatus" to listener SAMY_Robot.get_status
+PUBSUB: Start sending message of topic "write_information_source"
+PUBSUB: Sending message of topic "write_information_source" to listener Plugin.write_information_source
+PUBSUB: Done sending message of topic "write_information_source"
+PUBSUB: Start sending message of topic "write_information_source"
+PUBSUB: Sending message of topic "write_information_source" to listener Plugin.write_information_source
+PUBSUB: Done sending message of topic "write_information_source"
+PUBSUB: Done sending message of topic "GetStatus"
+PUBSUB: Start sending message of topic "command_reset"
+PUBSUB: Sending message of topic "command_reset" to listener Plugin.send_command_reset
+PUBSUB: Done sending message of topic "command_reset"
+PUBSUB: Start sending message of topic "GetStatus"
+PUBSUB: Sending message of topic "GetStatus" to listener SAMY_Robot.get_status
+PUBSUB: Start sending message of topic "write_information_source"
+PUBSUB: Sending message of topic "write_information_source" to listener Plugin.write_information_source
+PUBSUB: Done sending message of topic "write_information_source"
+PUBSUB: Start sending message of topic "write_information_source"
+PUBSUB: Sending message of topic "write_information_source" to listener Plugin.write_information_source
+PUBSUB: Done sending message of topic "write_information_source"
+PUBSUB: Done sending message of topic "GetStatus"
+PUBSUB: Start sending message of topic "command_reset"
+PUBSUB: Sending message of topic "command_reset" to listener Plugin.send_command_reset
+PUBSUB: Done sending message of topic "command_reset"
+PUBSUB: Start sending message of topic "GetStatus"
+PUBSUB: Sending message of topic "GetStatus" to listener SAMY_Robot.get_status
+PUBSUB: Start sending message of topic "write_information_source"
+PUBSUB: Sending message of topic "write_information_source" to listener Plugin.write_information_source
+PUBSUB: Done sending message of topic "write_information_source"
+PUBSUB: Start sending message of topic "write_information_source"
+PUBSUB: Sending message of topic "write_information_source" to listener Plugin.write_information_source
+PUBSUB: Done sending message of topic "write_information_source"
+PUBSUB: Done sending message of topic "GetStatus"
+PUBSUB: Start sending message of topic "command_reset"
+PUBSUB: Sending message of topic "command_reset" to listener Plugin.send_command_reset
+PUBSUB: Done sending message of topic "command_reset"
+PUBSUB: Start sending message of topic "GetStatus"
+PUBSUB: Sending message of topic "GetStatus" to listener SAMY_Robot.get_status
+PUBSUB: Start sending message of topic "write_information_source"
+PUBSUB: Sending message of topic "write_information_source" to listener Plugin.write_information_source
+PUBSUB: Done sending message of topic "write_information_source"
+PUBSUB: Start sending message of topic "write_information_source"
+PUBSUB: Sending message of topic "write_information_source" to listener Plugin.write_information_source
+PUBSUB: Done sending message of topic "write_information_source"
+PUBSUB: Done sending message of topic "GetStatus"
+PUBSUB: Start sending message of topic "command_reset"
+PUBSUB: Sending message of topic "command_reset" to listener Plugin.send_command_reset
+PUBSUB: Done sending message of topic "command_reset"
