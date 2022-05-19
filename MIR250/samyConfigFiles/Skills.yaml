@@ -1,0 +1,5 @@
+FundamentalSkills: # Fundamental skills are only composed by CRCL commands
+  - FundamentalSkill:
+      SkillName: StartMissionSkill
+      CRCLCommands:
+        - Message
