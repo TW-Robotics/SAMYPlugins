@@ -1,0 +1,9 @@
+Robots:
+  - Robot:
+      Name: Mir200
+      ID: 2
+      Address: "192.168.8.24:3300"
+      AuthKey: 'Basic ZGlzdHJpYnV0b3I6NjJmMmYwZjFlZmYxMGQzMTUyYzk1ZjZmMDU5NjU3NmU0ODJiYjhlNDQ4MDY0MzNmNGNmOTI5NzkyODM0YjAxNA=='     #set the authorization key
+      OPCUARoboticsFile: RobotABB.xml
+      Skills:
+        - StartMissionSkill
