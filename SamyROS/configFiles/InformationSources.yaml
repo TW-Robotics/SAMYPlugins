@@ -1,0 +1,7 @@
+InformationSources:
+  - InformationSource:
+      InformationSourceName: "current_pose"
+      DataTypes:
+             - CRCL_PoseDataType
+
+
