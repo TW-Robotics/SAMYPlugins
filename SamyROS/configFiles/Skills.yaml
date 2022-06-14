@@ -1,0 +1,12 @@
+FundamentalSkills: # Fundamental skills are only composed by CRCL commands
+   - FundamentalSkill:
+         SkillName: MoveToSkill
+         CRCLCommands:
+             - MoveTo
+   - FundamentalSkill:
+         SkillName: GetStatusSkill
+         CRCLCommands:
+             - GetStatus
+    
+
+

@@ -1,0 +1,25 @@
+version: "3.3"
+
+volumes:
+  samyvolume: 
+
+services:
+  samycore:
+    image: samycore:latest
+    volumes:
+      - samyvolume:/usr/src/samy/configFiles
+    ports:
+      - 4840:4840
+  samyros: 
+    command: /bin/bash -c './start.sh 127.0.0.1 12345 h2017 virtual'
+    image: samyros:latest
+    tty: true
+    volumes: 
+      - samyvolume:/usr/src/samy/configFiles
+  config:
+    image: configeditor:latest
+    ports:
+      - 8000:8000
+    volumes:
+      - samyvolume:/configFiles
+
