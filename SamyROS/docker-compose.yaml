@@ -11,7 +11,7 @@ services:
     ports:
       - 4840:4840
   samyros: 
-    command: /bin/bash -c './start.sh 127.0.0.1 12345 virtual'
+    command: /bin/bash -c './start.sh 127.0.0.1 12345 h2017 virtual'
     image: samyros:latest
     tty: true
     volumes: 
