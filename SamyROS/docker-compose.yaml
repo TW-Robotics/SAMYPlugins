@@ -5,14 +5,13 @@ volumes:
 
 services:
   samycore:
-    #command: "/bin/bash -c './SAMYCore ../configFiles/SAMYCoreConfig.yaml'"
     image: samycore:latest
     volumes:
       - samyvolume:/usr/src/samy/configFiles
     ports:
       - 4840:4840
   samyros: 
-    command: /bin/bash -c './start.sh 127.0.0.1 virtual'
+    command: /bin/bash -c './start.sh 127.0.0.1 12345 virtual'
     image: samyros:latest
     tty: true
     volumes: 
