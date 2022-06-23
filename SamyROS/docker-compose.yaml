@@ -2,12 +2,12 @@ version: "3.3"
 
 services:
   samycore:
-    image: samycore:latest
+    image: core:latest
     network_mode: "host"
     volumes:
       - ./configFiles:/usr/src/samy/configFiles
   samyros: 
-    command: /bin/bash -c './start.sh 192.168.61.12 12345 h2017 real'
+    command: /bin/bash -c './start.sh 127.0.0.1 12345 h2017 virtual'
     image: samyros:latest
     network_mode: "host"
     tty: true
@@ -21,3 +21,4 @@ services:
     volumes:
       - ./configFiles:/usr/src/samy/configFiles
 
+#sed -i -e 's/\r$//' /bin/bash -c 
