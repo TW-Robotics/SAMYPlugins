@@ -2,10 +2,17 @@ Robots:
   - Robot:
       Name: doosan
       ID: 12344
-      Address: "10.0.0.23"
-      ROSParametes:
-      Launchfile: "/home/samy/catkin_ws/src/doosan-robot/dsr_launcher/launch/dsr_moveit_gazebo.launch"
+      Address: "192.168.0.101"
       OPCUARoboticsFile: RobotUR5.xml
       Skills:
-         - MoveToSkill
-         - GetStatusSkill
+        - MoveSkill
+        - GripperApproach
+        - GripperAttach
+      Workobject:
+        - -0.12
+        - -0.4
+        - 0.15
+        - 0.0
+        - 0.0
+        - -1.57
+

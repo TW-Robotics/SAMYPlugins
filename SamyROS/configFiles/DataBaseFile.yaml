@@ -1,283 +1,168 @@
 DataBase:
 - !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
   RealTimeParameter: false
+  Name: MoveToHome
   MoveStraight: true
   EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
     id: 0
-    name: abb_home
+    name: Null
     point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
       id: 0
-      name: null
-      x: -200
-      y: 300
-      z: 150
+      name: Null
+      x: 0
+      y: -0.8
+      z: 1
     xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
       id: 0
-      name: null
+      name: Null
       i: -1
       j: 0
       k: 0
     zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
       id: 0
-      name: null
+      name: Null
       i: 0
       j: 0
       k: -1
 - !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
   RealTimeParameter: false
+  Name: MoveToPickAbove
   MoveStraight: true
   EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
     id: 0
-    name: ur5_home
+    name: Null
     point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
       id: 0
-      name: null
-      x: -200
-      y: -300
-      z: 300
+      name: Null
+      x: 0.5
+      y: -0.8
+      z: 0.5
     xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
       id: 0
-      name: null
+      name: Null
       i: -1
       j: 0
       k: 0
     zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
       id: 0
-      name: null
+      name: Null
+      i: 0
+      j: 0
+      k: -1
+- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
+  RealTimeParameter: false
+  Name: MoveToPick
+  MoveStraight: true
+  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
+    id: 0
+    name: Null
+    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
+      id: 0
+      name: Null
+      x: 0.5
+      y: -0.8
+      z: 0.4
+    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
+      id: 0
+      name: Null
+      i: -1
+      j: 0
+      k: 0
+    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
+      id: 0
+      name: Null
+      i: 0
+      j: 0
+      k: -1
+- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
+  RealTimeParameter: false
+  Name: MoveToPlaceLeft
+  MoveStraight: true
+  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
+    id: 0
+    name: Null
+    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
+      id: 0
+      name: Null
+      x: 0
+      y: -0.8
+      z: 0.4
+    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
+      id: 0
+      name: Null
+      i: -1
+      j: 0
+      k: 0
+    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
+      id: 0
+      name: Null
+      i: 0
+      j: 0
+      k: -1
+- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
+  Name: MoveToPlaceRight
+  RealTimeParameter: false
+  MoveStraight: true
+  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
+    id: 0
+    name: Null
+    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
+      id: 0
+      name: Null
+      x: -0.5
+      y: -0.8
+      z: 0.4
+    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
+      id: 0
+      name: Null
+      i: -1
+      j: 0
+      k: 0
+    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
+      id: 0
+      name: Null
+      i: 0
+      j: 0
+      k: -1
+- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
+  Name: MoveToPlaceAbove
+  RealTimeParameter: false
+  MoveStraight: true
+  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
+    id: 0
+    name: Null
+    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
+      id: 0
+      name: Null
+      x: -0.25
+      y: -0.8
+      z: 0.5
+    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
+      id: 0
+      name: Null
+      i: -1
+      j: 0
+      k: 0
+    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
+      id: 0
+      name: Null
       i: 0
       j: 0
       k: -1
 - !!python/object:CRCL_DataTypes.SetTransSpeedParametersSetDataType
-  RealTimeParameter: true
+  Name: UniversalSpeed
+  RealTimeParameter: false
   TransSpeed: !!python/object:CRCL_DataTypes.CRCL_TransSpeedDataType
     isUnion: true
     switchField: 1
     unionValue: !!python/object:CRCL_DataTypes.CRCL_TransSpeedAbsoluteDataType
       id: 0
-      name: universal_speed
+      name: Null
       setting: 150
 - !!python/object:CRCL_DataTypes.SetEndeffectorParametersSetDataType
-  RealTimeParameter: true
-  Setting: !!python/object:CRCL_DataTypes.CRCL_FractionDataType
-    fraction: 0
-    fractionMax: 0
-    fractionMin: 0
-- !!python/object:CRCL_DataTypes.SetEndeffectorParametersSetDataType
-  RealTimeParameter: true
+  RealTimeParameter: false
+  Name: CloseGripper
   Setting: !!python/object:CRCL_DataTypes.CRCL_FractionDataType
     fraction: 1
     fractionMax: 0
     fractionMin: 0
-- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
-  RealTimeParameter: false
-  MoveStraight: true
-  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
-    id: 0
-    name: ur5_above_pickup
-    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
-      id: 0
-      name: null
-      x: 102.59381103515625
-      y: 0.1490497589111328
-      z: 195.56561279296875
-    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: -1
-      j: 0
-      k: 0
-    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: 0
-      j: 0
-      k: -1
-- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
-  RealTimeParameter: false
-  MoveStraight: true
-  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
-    id: 0
-    name: ur5_pickup
-    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
-      id: 0
-      name: null
-      x: 102.59381103515625
-      y: 0.1490497589111328
-      z: 95.56561279296875
-    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: -1
-      j: 0
-      k: 0
-    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: 0
-      j: 0
-      k: -1
-- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
-  RealTimeParameter: false
-  MoveStraight: true
-  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
-    id: 0
-    name: ur5_above_place
-    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
-      id: 0
-      name: null
-      x: -375
-      y: 60
-      z: 220
-    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: -1
-      j: 0
-      k: 0
-    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: 0
-      j: 0
-      k: -1
-- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
-  RealTimeParameter: false
-  MoveStraight: true
-  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
-    id: 0
-    name: ur5_place
-    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
-      id: 0
-      name: null
-      x: -375
-      y: 60
-      z: 120
-    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: -1
-      j: 0
-      k: 0
-    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: 0
-      j: 0
-      k: -1
-- !!python/object:CRCL_DataTypes.SetTransSpeedParametersSetDataType
-  RealTimeParameter: true
-  TransSpeed: !!python/object:CRCL_DataTypes.CRCL_TransSpeedDataType
-    isUnion: true
-    switchField: 1
-    unionValue: !!python/object:CRCL_DataTypes.CRCL_TransSpeedAbsoluteDataType
-      id: 0
-      name: universal_speed
-      setting: 150
-- !!python/object:CRCL_DataTypes.SetEndeffectorParametersSetDataType
-  RealTimeParameter: true
-  Setting: !!python/object:CRCL_DataTypes.CRCL_FractionDataType
-    fraction: 0
-    fractionMax: 0
-    fractionMin: 0
-- !!python/object:CRCL_DataTypes.SetEndeffectorParametersSetDataType
-  RealTimeParameter: true
-  Setting: !!python/object:CRCL_DataTypes.CRCL_FractionDataType
-    fraction: 1
-    fractionMax: 0
-    fractionMin: 0
-- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
-  RealTimeParameter: false
-  MoveStraight: true
-  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
-    id: 0
-    name: ur5_above_pickup
-    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
-      id: 0
-      name: null
-      x: 101.20625305175781
-      y: -99.81166076660156
-      z: 195.8819580078125
-    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: -1
-      j: 0
-      k: 0
-    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: 0
-      j: 0
-      k: -1
-- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
-  RealTimeParameter: false
-  MoveStraight: true
-  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
-    id: 0
-    name: ur5_pickup
-    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
-      id: 0
-      name: null
-      x: 101.20625305175781
-      y: -99.81166076660156
-      z: 95.8819580078125
-    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: -1
-      j: 0
-      k: 0
-    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: 0
-      j: 0
-      k: -1
-- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
-  RealTimeParameter: false
-  MoveStraight: true
-  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
-    id: 0
-    name: ur5_above_place
-    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
-      id: 0
-      name: null
-      x: -375
-      y: 60
-      z: 220
-    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: -1
-      j: 0
-      k: 0
-    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: 0
-      j: 0
-      k: -1
-- !!python/object:CRCL_DataTypes.MoveToParametersSetDataType
-  RealTimeParameter: false
-  MoveStraight: true
-  EndPosition: !!python/object:CRCL_DataTypes.CRCL_PoseDataType
-    id: 0
-    name: ur5_place
-    point: !!python/object:CRCL_DataTypes.CRCL_PointDataType
-      id: 0
-      name: null
-      x: -375
-      y: 60
-      z: 120
-    xAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: -1
-      j: 0
-      k: 0
-    zAxis: !!python/object:CRCL_DataTypes.CRCL_VectorDataType
-      id: 0
-      name: null
-      i: 0
-      j: 0
-      k: -1

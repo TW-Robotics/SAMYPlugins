@@ -1,0 +1,16 @@
+States:
+  Camera_Ready:
+    key: Information_Source_CameraReady
+    type: Boolean
+    values:
+    - true
+  doosan_Ready:
+    key: 'Robot_doosan_CurrentState'
+    type: 'String'
+    values:
+     - Ready
+  Start_Ready:
+    key: Robot_doosan_CurrentState
+    type: String
+    values:
+    - Ready
