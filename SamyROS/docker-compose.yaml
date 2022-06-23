@@ -6,14 +6,10 @@ services:
     network_mode: "host"
     volumes:
       - ./configFiles:/usr/src/samy/configFiles
-    #ports:
-    #  - 4840:4840
   samyros: 
-    command: /bin/bash -c './start.sh 127.0.0.1 12345 h2017 virtual'
+    command: /bin/bash -c './start.sh 192.168.61.12 12345 h2017 real'
     image: samyros:latest
     network_mode: "host"
-    #ports:
-    #  - 12345:12345
     tty: true
     volumes: 
       - ./configFiles:/usr/src/samy/configFiles
