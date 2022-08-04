@@ -56,7 +56,7 @@ class SAMY_Robot():
         pub.subscribe(self.move_to, "MoveTo")
         pub.subscribe(self.move_through_to, "MoveThroughTo")
         pub.subscribe(self.dwell, "Dwell")
-        pub.subscribe(self.send_status, "GetStatus")
+        pub.subscribe(self.write_pose, "GetStatus")
         pub.subscribe(self.set_end_effector, "SetEndeffector")
         pub.subscribe(self.set_trans_accel, "SetTransAccel")
         pub.subscribe(self.set_trans_speed, "SetTransSpeed")
@@ -78,6 +78,13 @@ class SAMY_Robot():
 
     def move_through_to(self, data):
         self.logger.info("Not supported")
+
+    def write_pose(self, data):
+        self.logger.info("Writing pose to information source.")
+        vars = []
+        vars.append(True)
+        vars.append(True)
+        pub.sendMessage("write_information_source", name="CameraReady", data=vars)
 
     def dwell(self, data):
         """ Sleep for an amount of time.
