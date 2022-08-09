@@ -13,7 +13,7 @@ The parameter JointPosition sets the Value. At the moment only ports that are co
     - JointPosition > 0 -> Output on
     - JointPosition <= 0 -> Output off
 
-# Adding a new IO-Link Sensor
+# Adding a new IO-Link Sensor (is this up to date?)
 1. Add Subscription in the RobotsConfig file
 1. Add on_messageXX callback in mqtt.py 
 1. Add callback to mqtt client

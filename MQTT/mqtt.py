@@ -23,7 +23,7 @@ class Mqtt():
         self.mosquitto_server = None
         self.start_mqtt_server()
         # Configure the publishers on the IOLink Master
-        #self.configure_io_link_master(global_settings["IOLinkAddress"])
+        # self.configure_io_link_master(global_settings["IOLinkAddress"])
         # Connect callack functions with mqtt client
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
@@ -75,6 +75,7 @@ class Mqtt():
 
     # Starting the mqtt server using mosquitto
     def start_mqtt_server(self):
+        self.logger.debug("Starting MQTT mosquitto server.")
         self.mosquitto_server = subprocess.Popen(["mosquitto", "-p", "2222"])
         # Wait for the mqtt server to start
         sleep(2)
