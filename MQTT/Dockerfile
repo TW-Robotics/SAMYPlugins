@@ -13,7 +13,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update -y
 RUN apt upgrade -y
 RUN apt install -y build-essential python3-pip
-RUN pip3 install requests numpy math3d scipy ipython pypubsub python-dateutil pytz lxml cryptography pyyaml
+RUN pip3 install requests numpy math3d scipy ipython pypubsub python-dateutil pytz lxml cryptography pyyaml paho-mqtt
+RUN apt install -y mosquitto
 
 ## copy files into image
 RUN mkdir /usr/src/samy
