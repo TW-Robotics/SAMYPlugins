@@ -11,7 +11,7 @@ import signal
 class Mqtt():
     def __init__(self, address, port, global_settings):
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
         log_handler = logging.StreamHandler()
         log_handler.setFormatter(logging.Formatter("%(levelname)s %(filename)s - %(message)s"))
         self.logger.addHandler(log_handler)
