@@ -20,7 +20,7 @@ services:
   controller:
     image: controller:latest
     network_mode: "host"
-    command: python3 Tests/startBPMNController.py samycore test2.diagram BPMNbasedController_Configuration_File.yaml
+    command: python3 Tests/startBPMNController.py localhost test2.diagram BPMNbasedController_Configuration_File.yaml
     tty: true
     volumes:
       - ./configFiles:/usr/src/samy/configFiles

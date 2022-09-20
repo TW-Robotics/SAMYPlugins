@@ -399,18 +399,18 @@
   <SamyBpmnModel:Process id="place_id_4" name="doosan:MoveSkill">
     <incoming>trans_id_3</incoming>
     <outgoing>trans_id_21</outgoing>
-    <param key='1' type="data">MoveToHome</param>
+    <param key='1' type="data" >MoveToHome</param>
   </SamyBpmnModel:Process>
   <SamyBpmnModel:Process id="place_id_7" name="doosan:GripperApproach">
     <incoming>trans_id_21</incoming>
     <outgoing>trans_id_22</outgoing>
-    <param key="1 "type="data">MoveToPickAbove</param>
+    <param key="1" type="data" >MoveToPickAbove</param>
   </SamyBpmnModel:Process>
   <SamyBpmnModel:Process id="place_id_9" name="doosan:GripperAttach">
     <incoming>trans_id_22</incoming>
     <outgoing>trans_id_10</outgoing>
-    <param key="1" type="data">MoveToPick</param>
-    <param key="2" type="data">MoveToPickAbove</param>
+    <param key="1" type="data" >MoveToPick</param>
+    <param key="2" type="data" >MoveToPickAbove</param>
   </SamyBpmnModel:Process>
   <SamyBpmnModel:ExclusiveGateway id="place_id_10" keyVariable="object_count">
     <incoming>trans_id_10</incoming>
@@ -420,7 +420,7 @@
   <SamyBpmnModel:Process id="place_id_11" name="doosan:MoveSkill">
     <incoming>trans_id_11</incoming>
     <outgoing>trans_id_20</outgoing>
-    <param key="1" type="data">MoveToPlaceLeft</param>
+    <param key="1" type="data" >MoveToPlaceLeft</param>
   </SamyBpmnModel:Process>
   <SamyBpmnModel:Process id="place_id_12" name="doosan:MoveSkill">
     <incoming>trans_id_12</incoming>
