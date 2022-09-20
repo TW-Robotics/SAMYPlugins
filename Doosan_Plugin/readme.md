@@ -1,9 +1,11 @@
 # SamyPlugin for the Doosan H2017 Robot (SAMYROS)
 
-In the following readme a description is given, to start the plugin for the **h2017** doosan robot.
+In the following readme a description is given, how to start the plugin for the **h2017** doosan robot.
 
 > Notice: In order to get the plugin working you need **docker** as well as **docker-compose** installed on your machine.
 > The plugin also needs a connection to the **samycore**. Best option for testing is to startup the samycore in a separate docker container which can communicate with the plugin.
+
+> Notice: The real doosan robot needs to be on the same network as the Doosan_Plugin. In the docker-compose.yaml file all networks are set to "host".
 
 1. Clone the SamyPlugin repository from Github with: 
 ```console
