@@ -1,0 +1,27 @@
+version: "3.3"
+
+services:
+  samycore:
+    image: core:latest
+    network_mode: "host"
+    volumes:
+      - ./configFiles:/usr/src/samy/configFiles
+    #ports:
+    #  - 4840:4840
+  samyros: 
+    command: /bin/bash -c './start.sh 10.0.0.22 12345 h2017 real'
+    image: samyros:latest
+    network_mode: "host"
+    #ports:
+    #  - 12345:12345
+    tty: true
+    volumes: 
+      - ./configFiles:/usr/src/samy/configFiles
+  controller:
+    image: controller:latest
+    network_mode: "host"
+    command: python3 Tests/startBPMNController.py samycore test2.diagram BPMNbasedController_Configuration_File.yaml
+    tty: true
+    volumes:
+      - ./configFiles:/usr/src/samy/configFiles
+
