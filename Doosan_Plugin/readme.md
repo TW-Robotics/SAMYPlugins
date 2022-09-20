@@ -10,14 +10,14 @@ In the following readme a description is given, to start the plugin for the **h2
 $ git clone https://github.com/TW-Robotics/SAMYPlugins.git
 ```
 
-2. Go into the root SamyRos folder which is containing the Dockerfile
-3. Build the docker container for the SamyRos Plugin with:
+2. Go into the root Doosan_Plugin folder which is containing the Dockerfile
+3. Build the docker container for the Doosan_Plugin with:
 ```console
 $ sudo docker build -t samyros .
 ```
 > Notice: Don't forget the point at the end in the command before!
 
-> Notice: The SamyRos plugin is embedded in the *docker-compose.yaml*  file. The file assumes that there is a docker image for the samycore which is called **samycore**.
+> Notice: The Doosan_Plugin is embedded in the *docker-compose.yaml*  file. The file assumes that there is a docker image for the samycore which is called **samycore**.
 
 4. Edit the docker-compose.yaml file so that the plugin can communicate with the robot:
     * In line 14 of the *docker-compose.yaml* after "start.sh" there are four arguments seperated with whitespaces
