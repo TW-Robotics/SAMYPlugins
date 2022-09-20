@@ -98,7 +98,7 @@ class Samyros:
         #self.constr.joint_constraints.append(jc6)
         
         #Write Constrains to move_group
-        self.move_group.set_path_constraints(self.constr)
+        #self.move_group.set_path_constraints(self.constr)
         
                 
         #Subscribe
