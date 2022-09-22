@@ -37,11 +37,39 @@ $ docker-compose up
 This starts the plugin and connects to the samycore.
 By default the Doosan Robot model H2017 will be started.
 ***
+## Change the roboter model
 In order to start a **different model** a few changes have to be made.
 
 1. Change the third argument in the *docker-compose.yaml* file *(default: h2017)*. Replace this with e.g.: *m0617*
 2. The same model as in the compose file has to written in the *samyros.py* file. In line 6 *"ROS_NAMESPACE" = "/dsr01h2017"* has to be changes accordingly. For example if the model *m0617* is used the argument has to look like this: *"/dsr01m0617"*
 3. In order to apply the changes made, the docker container has to be built again with:
+```console
+$ sudo docker build -t samyros .
+```
+***
+## Joint constraints
+Some inverse kinematics solutions of the numeric solver lead to strange behavior of the robot when giving point to point instructions.
+In order to to limit the movement of the robot, joint constraints are introduced.
+To limit the robot per axis, the *samyros.py* file needs to be modified at the parameters for the joint constraints.
+The following example is a part of the code of the *samyros.py* file. It shows the code for the joint constraint of the first axis of the robot.
+```console
+#Constrain Joint 1
+jc1 = moveit_msgs.msg.JointConstraint()
+jc1.position = 0.0
+jc1.tolerance_above = math.pi
+jc1.tolerance_below = math.pi
+jc1.weight = 1.0
+jc1.joint_name = self.move_group.get_joints()[0]
+self.constr.joint_constraints.append(jc1)
+```
+At the parameters **jc1.tolerance_above** and **jc1.tolerance_below** is currently a limit of PI in each direction starting form the origin reference of the axis.
+> Notice: The angle is given in RAD so  -> (2*PI = 360°)
+For more constraints of other axis just uncomment the following part in the *samyros.py* file and set the parameters for the constraint.
+In order to get the contraints activated please uncomment the following line in the code.
+```console
+#self.move_group.set_path_constraints(self.constr)
+```
+After this process the docker container needs to be rebuild with
 ```console
 $ sudo docker build -t samyros .
 ```
