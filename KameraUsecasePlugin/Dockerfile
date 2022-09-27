@@ -11,4 +11,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 ## installing dependencies
 RUN apt update -y
 RUN apt upgrade -y
-RUN apt install python3 -y
+RUN apt install python3 pip -y
+RUN pip install opencv-python
+RUN pip install pyrealsense2
