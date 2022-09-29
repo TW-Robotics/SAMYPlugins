@@ -1,7 +1,6 @@
 import sys
 import time
 import subprocess
-import roslaunch
 from samyplugin import Plugin
 from kamera import Kamera
 from pubsub import pub

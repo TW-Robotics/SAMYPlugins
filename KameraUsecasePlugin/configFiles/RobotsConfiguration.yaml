@@ -1,0 +1,10 @@
+Robots:
+  - Robot:
+      Name: Kamera
+      ID: 09876
+      Address: "127.0.0.1"
+      OPCUARoboticsFile: RobotUR5.xml
+      Skills:
+        - GetPose
+
+

@@ -1,0 +1,14 @@
+InformationSources:
+    - InformationSource:
+          InformationSourceName: "Yellow"
+          DataTypes:
+                - Boolean
+    - InformationSource:
+          InformationSourceName: "partDetected"
+          DataTypes:
+                - Boolean
+    - InformationSource:
+          InformationSourceName: "CameraPose"
+          DataTypes:
+                - CRCL_MoveToParametersDataType
+

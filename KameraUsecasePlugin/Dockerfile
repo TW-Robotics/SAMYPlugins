@@ -11,6 +11,15 @@ ARG DEBIAN_FRONTEND=noninteractive
 ## installing dependencies
 RUN apt update -y
 RUN apt upgrade -y
-RUN apt install python3 pip -y
-RUN pip install opencv-python
-RUN pip install pyrealsense2
+RUN apt install build-essential python3 python3-pip apt-utils libgl1 libglib2.0-0 -y
+RUN pip3 install opencv-python pyrealsense2 numpy pypubsub requests scipy ipython python-dateutil pytz lxml cryptography pyyaml
+
+## copy files into image
+RUN mkdir /usr/src/samy
+WORKDIR /usr/src/samy
+COPY . ./
+
+## Install custom opcua package and saymplugin package
+RUN pip3 install pip/opcua-0.98.13-py3-none-any.whl 
+RUN pip3 install pip/samyplugin-0.2-py3-none-any.whl
+

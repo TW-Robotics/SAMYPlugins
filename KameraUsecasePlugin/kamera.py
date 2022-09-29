@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 import cv2 as cv
 import numpy as np
+from pubsub import pub
+from samyplugin.CRCL_DataTypes import *
 #import pyrealsense2 as rs
 
 
 class Kamera:
 
     def __init__(self,robot_settings):
+
+        #workpiece coordinates in robot-coordinatesystem
+        self.X_robot = 0
+        self.Y_robot = 0
 
         self.origin = (630,38)
         self.mm = 3.84286
@@ -16,7 +22,7 @@ class Kamera:
         self.kernelsize = 7
         self.kernel = np.ones((self.kernelsize, self.kernelsize), np.uint8)
 
-        self.frame = cv.imread("Beispielbilder/3.jpg")
+        self.frame = cv.imread("Beispielbilder/4.jpg")
         self.hsv = cv.cvtColor(self.frame, cv.COLOR_BGR2HSV)
         self.h,  self.w = self.frame.shape[:2]
 
@@ -32,16 +38,18 @@ class Kamera:
         self.hth_grey = np.array([110, 160, 150])
 
         #mask_yellow
-        self.lth_yellow = np.array([90, 60, 30]) 
-        self.hth_yellow = np.array([110, 160, 150])
+        self.lth_yellow = np.array([23, 165, 0]) 
+        self.hth_yellow = np.array([27, 191, 220])
 
-        self.cv.namedWindow("img", 0)
+        cv.namedWindow("img", 0)
+
+        pub.subscribe(self.get_status, "GetStatus")
 
 
     def __del__(self):
         cv.destroyAllWindows()
 
-    def getCircles(mask):
+    def getCircles(self,mask):
         #bluring
         blured = cv.medianBlur(mask, 5)
         blured = cv.erode(blured, self.kernel)
@@ -51,8 +59,27 @@ class Kamera:
                                     minRadius=50, maxRadius=150)
 
 
+    def get_status(self):
+        self.detect()
+        if self.X_robot != 0:
+            parameters = CRCL_MoveToParametersDataType()
+            parameters.EndPosition.pos.x = self.X_robot
+            parameters.EndPosition.pos.y = self.Y_robot
+            parameters.EndPosition.pos.z = 0.0
+            parameters.EndPosition.xAxis.i = 0.707
+            parameters.EndPosition.xAxis.j = 0.707
+            parameters.EndPosition.xAxis.k = 0.0
+            parameters.EndPosition.zAxis.i = 0.0
+            parameters.EndPosition.zAxis.j = 0.0
+            parameters.EndPosition.zAxis.k = -1.0
+            pub.sendMessage("write_information_source", name="CameraPose", data=parameters)
+            pub.sendMessage("write_information_source", name="Yellow", data=self.yellow)
+            pub.sendMessage("write_information_source", name="partDetected", data=True)
+        else:
+            pub.sendMessage("write_information_source", name="partDetected", data=False)
 
-    def detect:
+
+    def detect(self):
 
         #undistort
         self.undist = cv.undistort(self.frame, self.kmat, self.dstmat, None, None)
@@ -97,7 +124,7 @@ class Kamera:
             print("Kamerakoordinaten: " ,X,"mm in X und",Y,"mm in Y")
 
             self.X_robot = np.round(self.X - 87.5 , 1)
-            self.Y_robot = np.round(self.Y + 210 , 1)
+            self.Y_robot = np.round(self.Y + 210.0 , 1)
 
             print("Kooordinaten im Roboter Koordiantensystem: " ,self.X_robot,"mm in X und",self.Y_robot,"mm in Y")
 
