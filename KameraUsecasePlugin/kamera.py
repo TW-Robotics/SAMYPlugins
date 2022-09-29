@@ -3,88 +3,114 @@ import cv2 as cv
 import numpy as np
 #import pyrealsense2 as rs
 
-origin = (630,38)
-mm = 3.84286
+
+class Kamera:
+
+    def __init__(self,robot_settings):
+
+        self.origin = (630,38)
+        self.mm = 3.84286
+        #Workpiece is either yellow or grey
+        self.yellow = False
+
+        self.kernelsize = 7
+        self.kernel = np.ones((self.kernelsize, self.kernelsize), np.uint8)
+
+        self.frame = cv.imread("Beispielbilder/3.jpg")
+        self.hsv = cv.cvtColor(self.frame, cv.COLOR_BGR2HSV)
+        self.h,  self.w = self.frame.shape[:2]
+
+        #camera matrix
+        self.kmat = [[1352.06955467799, 0, 973.803727404974] , [0, 1366.87675727465, 533.592541104211] , [0, 0, 1]]
+        self.dstmat = [[0.127509519023764, -0.306871810182364, -0.000864384921776296, 0.00145553767677557, 0.125094379310040]]
+        self.kmat = np.array(self.kmat)
+        self.dstmat = np.array(self.dstmat)
+        self.kmat.reshape((3, 3))
+
+        #mask_grey
+        self.lth_grey = np.array([90, 60, 30]) 
+        self.hth_grey = np.array([110, 160, 150])
+
+        #mask_yellow
+        self.lth_yellow = np.array([90, 60, 30]) 
+        self.hth_yellow = np.array([110, 160, 150])
+
+        self.cv.namedWindow("img", 0)
 
 
-frame = cv.imread("Beispielbilder/3.jpg")
-hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
-h,  w = frame.shape[:2]
+    def __del__(self):
+        cv.destroyAllWindows()
 
-kernelsize = 7
-kernel = np.ones((kernelsize, kernelsize), np.uint8)
+    def getCircles(mask):
+        #bluring
+        blured = cv.medianBlur(mask, 5)
+        blured = cv.erode(blured, self.kernel)
+        #searching for circles
+        self.circles = cv.HoughCircles(blured, cv.HOUGH_GRADIENT, 1, 1000,
+                                    param1=20, param2=10,
+                                    minRadius=50, maxRadius=150)
 
-#cv.namedWindow("img", 0)
-#cv.imshow("img" , frame)
-#cv.waitKey(1000)
 
-#camera matrix
-kmat = [[1352.06955467799, 0, 973.803727404974] , [0, 1366.87675727465, 533.592541104211] , [0, 0, 1]]
-dstmat = [[0.127509519023764, -0.306871810182364, -0.000864384921776296, 0.00145553767677557, 0.125094379310040]]
-kmat = np.array(kmat)
-dstmat = np.array(dstmat)
-kmat.reshape((3, 3))
 
-#newkmat, roi = cv.getOptimalNewCameraMatrix(kmat, dstmat, (w,h), 1, (w,h))
-undist = cv.undistort(frame, kmat, dstmat, None, None)
-undist = undist[100:1000, 100:800]
-hsv = cv.cvtColor(undist, cv.COLOR_BGR2HSV)
+    def detect:
 
-#mask
-lth_gray = np.array([90, 60, 30]) 
-hth_gray = np.array([110, 160, 150])
-mask_grey = cv.inRange(hsv, lth_gray, hth_gray)
+        #undistort
+        self.undist = cv.undistort(self.frame, self.kmat, self.dstmat, None, None)
+        self.undist = self.undist[100:1000, 100:800]
+        self.hsv = cv.cvtColor(self.undist, cv.COLOR_BGR2HSV)
+        #drawing coordinate system
+        cv.line(self.undist,self.origin,(self.origin[0] - 100,self.origin[1]),(255,0,0),5)
+        cv.line(self.undist,self.origin,(self.origin[0] ,self.origin[1]+ 100),(255,0,0),5)
+        #creating masks
+        self.mask_grey = cv.inRange(self.hsv, self.lth_grey, self.hth_grey)
+        self.mask_yellow = cv.inRange(self.hsv, self.lth_yellow, self.hth_yellow)
+        
+        self.circles = 0
+        self.getCircles(mask_grey)
 
-blured = cv.medianBlur(mask_grey, 5)
-blured = cv.erode(blured, kernel)
+        if self.circles is not None:
+            self.yellow = False
+            self.circles = np.uint16(np.around(self.circles))
+            for i in self.circles[0, :]:
+                self.center = (i[0], i[1])
+                cv.circle(undist, self.center, 1, (0, 100, 100), 3)
+                self.radius = i[2]
+                cv.circle(undist, self.center, self.radius, (255, 0, 255), 3)
+        else:
+            self.getCircles(mask_yellow)
+            self.yellow = True
+            if self.circles is not None:
+                self.circles = np.uint16(np.around(self.circles))
+                for i in self.circles[0, :]:
+                    self.center = (i[0], i[1])
+                    cv.circle(self.undist, self.center, 1, (0, 100, 100), 3)
+                    self.radius = i[2]
+                    cv.circle(self.undist, self.center, self.radius, (255, 0, 255), 3)
 
-circles = cv.HoughCircles(blured, cv.HOUGH_GRADIENT, 1, 1000,
-                               param1=20, param2=10,
-                               minRadius=50, maxRadius=150)
 
-cv.line(undist,origin,(origin[0] - 100,origin[1]),(255,0,0),5)
-cv.line(undist,origin,(origin[0] ,origin[1]+ 100),(255,0,0),5)
+        #printing results
+        try:
+            self.distx_px = abs(self.center[0] - self.origin[0])
+            self.distx_py = abs(self.center[1] - self.origin[1])
+            self.X = np.round(self.distx_px/self.mm , 1)
+            self.Y = np.round(self.distx_py/self.mm , 1)
+            print("Kamerakoordinaten: " ,X,"mm in X und",Y,"mm in Y")
+
+            self.X_robot = np.round(self.X - 87.5 , 1)
+            self.Y_robot = np.round(self.Y + 210 , 1)
+
+            print("Kooordinaten im Roboter Koordiantensystem: " ,self.X_robot,"mm in X und",self.Y_robot,"mm in Y")
+
+
+        except:
+            print("No workpiece found!")
+
+        #display img
+        cv.imshow("img" , self.undist)
+        cv.waitKey(1000)
+        #writing img
+        cv.imwrite("undist.png" ,self.undist)
+
+
+
     
-if circles is not None:
-    circles = np.uint16(np.around(circles))
-    for i in circles[0, :]:
-        center = (i[0], i[1])
-        #print(center)
-        # circle center
-        cv.circle(undist, center, 1, (0, 100, 100), 3)
-        # circle outline
-        radius = i[2]
-        cv.circle(undist, center, radius, (255, 0, 255), 3)
-
-
-
-try:
-    distx_px = abs(center[0] - origin[0])
-    distx_py = abs(center[1] - origin[1])
-    X = np.round(distx_px/mm , 1)
-    Y = np.round(distx_py/mm , 1)
-    print("Kamerakoordinaten: " ,X,"mm in X und",Y,"mm in Y")
-
-    X_robot = np.round(X - 87.5 , 1)
-    Y_robot = np.round(Y + 210 , 1)
-
-    print("Kooordinaten im Roboter Koordiantensystem: " ,X_robot,"mm in X und",Y_robot,"mm in Y")
-
-
-except:
-    print("No workpiece found!")
-
-
-
-
-
-
-cv.imshow("img" , undist)
-cv.waitKey(1000)
-
-
-cv.imwrite("undist.png" ,undist)
-
-
-
-cv.destroyAllWindows()
