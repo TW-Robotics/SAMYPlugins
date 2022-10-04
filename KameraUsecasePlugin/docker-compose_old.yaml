@@ -1,0 +1,16 @@
+version: "3.3"
+
+services:
+  samycore:
+    image: core:latest
+    volumes:
+      - ./configFiles:/usr/src/samy/configFiles
+    ports:
+     - 4840:4840
+  Kamera: 
+    command: /bin/bash -c 'python3 main.py samycore kamera'
+    image: kamera:latest
+    tty: true
+    volumes: 
+      - ./configFiles:/usr/src/samy/configFiles
+

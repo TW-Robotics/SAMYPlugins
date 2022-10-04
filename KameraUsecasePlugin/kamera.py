@@ -53,14 +53,16 @@ class Kamera:
                 if s.get_info(rs.camera_info.name) == 'RGB Camera':
                     self.logger.info(" - RGB sensor found")
                     self.rgb_sensor = s                                # Set RGB sensor
-                if s.get_info(rs.camera_info.name) == 'Stereo Module':
-                    self.depth_sensor = s                              # Set Depth sensor
-                    self.logger.info(" - Depth sensor found")
+                #if s.get_info(rs.camera_info.name) == 'Stereo Module':
+                #   self.depth_sensor = s                              # Set Depth sensor
+                #  self.logger.info(" - Depth sensor found")
 
+        self.rgb_sensor.set_option(rs.option.gain, 0)
+        self.rgb_sensor.set_option(rs.option.enable_auto_white_balance, 1)
 
         self.pipe = rs.pipeline()
         cfg = rs.config() 
-        cfg.enable_stream(rs.stream.color, 1920, 1080, rs.format.rgb8, 30)
+        cfg.enable_stream(rs.stream.color, 1920, 1080, rs.format.bgr8, 30)
         profile = self.pipe.start(cfg)
         self.frame = None
 

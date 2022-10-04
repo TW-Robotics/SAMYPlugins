@@ -1,16 +1,45 @@
 version: "3.3"
-
 services:
-  samycore:
-    image: core:latest
+  core:
+    image: core
+    ports:
+      - 4840:4840
     volumes:
       - ./configFiles:/usr/src/samy/configFiles
-    ports:
-     - 4840:4840
-  Kamera: 
-    command: /bin/bash -c 'python3 main.py samycore kamera'
-    image: kamera:latest
+  mqtt:
+    image: mqtt-plugin
+    command: python3 main.py core MqttPlugin
     tty: true
+    volumes:
+      - ./configFiles:/usr/src/samy/configFiles
+  open-manipulator:
+    image: openman-plugin
+    command: /bin/bash -c './start.sh '
+    tty: true
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    volumes:
+      - ./configFiles:/usr/src/samy/configFiles
+  ur5:
+    image: ur5-plugin
+    command: python3 main.py core UR5Plugin
+    tty: true
+    volumes:
+      - ./configFiles:/usr/src/samy/configFiles
+  camera: 
+    command: /bin/bash -c 'python3 main.py core Camera'
+    image: camera-plugin
+    tty: true
+    privileged: true
+    devices:
+      - "/dev/video0:/dev/video0"
+      - "/dev/video1:/dev/video1"
+      - "/dev/video2:/dev/video2"
     volumes: 
       - ./configFiles:/usr/src/samy/configFiles
-
+  controller:
+    image: bpmn-controller
+    command: python3 Tests/startBPMNController.py core SimpleAssembly.diagram BPMNbasedController_Configuration_File.yaml
+    tty: true
+    volumes:
+      - ./configFiles:/usr/src/samy/configFiles
