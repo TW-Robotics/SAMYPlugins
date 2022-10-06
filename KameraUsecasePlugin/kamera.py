@@ -67,12 +67,12 @@ class Kamera:
         self.frame = None
 
         #mask_grey
-        self.lth_grey = np.array([50, 30, 10]) 
-        self.hth_grey = np.array([110, 160, 150])
+        self.lth_grey = np.array([50, 50, 20]) 
+        self.hth_grey = np.array([110, 190, 130])
 
         #mask_yellow
-        self.lth_yellow = np.array([23, 165, 0]) 
-        self.hth_yellow = np.array([27, 191, 220])
+        self.lth_yellow = np.array([20, 80, 20]) 
+        self.hth_yellow = np.array([35, 255, 255])
 
         pub.subscribe(self.get_status, "GetStatus")
 
