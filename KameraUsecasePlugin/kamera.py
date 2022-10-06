@@ -3,11 +3,10 @@ import cv2 as cv
 import numpy as np
 from pubsub import pub
 from samyplugin.CRCL_DataTypes import *
-#import samyplugin.CRCL_DataTypes
 import pyrealsense2 as rs
 import logging
 
-
+#camera class
 class Kamera:
 
     def __init__(self,robot_settings):
@@ -21,17 +20,18 @@ class Kamera:
         self.X_robot = 0
         self.Y_robot = 0
 
-        self.origin = (630,38)
+        self.origin = (630,38) # origin of the camera coordinate system in pixels
         self.mm = 3.84286 # one pixel corsponds to mm 
-        self.center = None
+        self.center = None # center of the workpiece
         #Workpiece is either yellow or grey
         self.yellow = False
         self.grey = False
-
+        
+        #kernel for bluring
         self.kernelsize = 7
         self.kernel = np.ones((self.kernelsize, self.kernelsize), np.uint8)
 
-        #camera matrix
+        #custom camera matrix for the RGB module of the Intel Realsense D435
         self.kmat = [[1352.06955467799, 0, 973.803727404974] , [0, 1366.87675727465, 533.592541104211] , [0, 0, 1]]
         self.dstmat = [[0.127509519023764, -0.306871810182364, -0.000864384921776296, 0.00145553767677557, 0.125094379310040]]
         self.kmat = np.array(self.kmat)
@@ -60,29 +60,29 @@ class Kamera:
                 #   self.depth_sensor = s                              # Set Depth sensor
                 #  self.logger.info(" - Depth sensor found")
 
-        self.rgb_sensor.set_option(rs.option.gain, 0)
-        self.rgb_sensor.set_option(rs.option.enable_auto_white_balance, 1)
+        self.rgb_sensor.set_option(rs.option.gain, 0) #Set the digital gain of the camera to zero
+        self.rgb_sensor.set_option(rs.option.enable_auto_white_balance, 1) #set autowhitebalance to automatic
 
         self.pipe = rs.pipeline()
         cfg = rs.config() 
-        cfg.enable_stream(rs.stream.color, 1920, 1080, rs.format.bgr8, 30)
+        cfg.enable_stream(rs.stream.color, 1920, 1080, rs.format.bgr8, 30) # set resolution and std rgb format 
         profile = self.pipe.start(cfg)
         self.frame = None
 
-        #mask_grey
+        #mask for grey object
         self.lth_grey = np.array([50, 50, 20]) 
         self.hth_grey = np.array([110, 190, 130])
 
-        #mask_yellow
+        #mask for yellow object
         self.lth_yellow = np.array([20, 80, 20]) 
         self.hth_yellow = np.array([35, 255, 255])
 
-        pub.subscribe(self.get_status, "GetStatus")
+        pub.subscribe(self.get_status, "GetStatus") # callback method for GetStatus Skill
 
 
     def __del__(self):
         self.pipe.stop()
-
+    #getting frame form Intel Realsense D435 camera
     def get_frame_from_camera(self):
         for _ in range(10): # Skip first frames to give syncer and auto-exposure time to adjust
             frameset = self.pipe.wait_for_frames()
@@ -95,7 +95,8 @@ class Kamera:
         self.h,  self.w = self.hsv.shape[:2]
         self.logger.info("Writing image to file.")
         cv.imwrite("./configFiles/image.jpg", self.frame)
-
+        
+    #searching for workpieces
     def getCircles(self, mask):
         #bluring
         blured = cv.medianBlur(mask, 5)
@@ -105,7 +106,7 @@ class Kamera:
                                     param1=20, param2=10,
                                     minRadius=50, maxRadius=150)
 
-
+    #publishing pose to the information source in the SAMY Core
     def get_status(self, data):
         self.get_frame_from_camera()
         self.detect()
@@ -124,7 +125,7 @@ class Kamera:
         pub.sendMessage("write_information_source", name="YellowPartDetected", data=self.yellow)
         pub.sendMessage("write_information_source", name="GreyPartDetected", data=self.grey)        
 
-
+    #detecting workpieces
     def detect(self):
         self.yellow = False
         self.grey = False
@@ -172,12 +173,12 @@ class Kamera:
             self.distx_py = abs(self.center[1] - self.origin[1])
             self.X = np.round(self.distx_px/self.mm , 1)
             self.Y = np.round(self.distx_py/self.mm , 1)
-            self.logger.info(f"Kamerakoordinaten: {self.X} mm in X und {self.Y} mm in Y")
+            self.logger.info(f"Camera coordinates: {self.X} mm in X and {self.Y} mm in Y")
 
             self.X_robot = np.round(self.X - 107.5 , 1)
             self.Y_robot = np.round(self.Y + 240.0 , 1)
 
-            self.logger.info(f"Kooordinaten im Roboter Koordiantensystem: {self.X_robot} mm in X und {self.Y_robot} mm in Y")
+            self.logger.info(f"Robot coordinates: {self.X_robot} mm in X and {self.Y_robot} mm in Y")
         else:
             print("No workpiece found!")
 
