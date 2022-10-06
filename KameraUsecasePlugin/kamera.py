@@ -3,6 +3,7 @@ import cv2 as cv
 import numpy as np
 from pubsub import pub
 from samyplugin.CRCL_DataTypes import *
+#import samyplugin.CRCL_DataTypes
 import pyrealsense2 as rs
 import logging
 
@@ -21,9 +22,11 @@ class Kamera:
         self.Y_robot = 0
 
         self.origin = (630,38)
-        self.mm = 3.84286
+        self.mm = 3.84286 # one pixel corsponds to mm 
+        self.center = None
         #Workpiece is either yellow or grey
         self.yellow = False
+        self.grey = False
 
         self.kernelsize = 7
         self.kernel = np.ones((self.kernelsize, self.kernelsize), np.uint8)
@@ -49,7 +52,7 @@ class Kamera:
 
         for device in self.selected_devices:                         
             self.logger.info(f"Required sensors for device: {device.get_info(rs.camera_info.name)}")
-            for s in device.sensors:                              # Show available sensors in each device
+            for s in device.sensors:                   # Show available sensors in each device
                 if s.get_info(rs.camera_info.name) == 'RGB Camera':
                     self.logger.info(" - RGB sensor found")
                     self.rgb_sensor = s                                # Set RGB sensor
@@ -81,7 +84,7 @@ class Kamera:
         self.pipe.stop()
 
     def get_frame_from_camera(self):
-        for _ in range(10):                                       # Skip first frames to give syncer and auto-exposure time to adjust
+        for _ in range(10): # Skip first frames to give syncer and auto-exposure time to adjust
             frameset = self.pipe.wait_for_frames()
         
         frameset = self.pipe.wait_for_frames()
@@ -107,10 +110,10 @@ class Kamera:
         self.get_frame_from_camera()
         self.detect()
         if self.X_robot != 0:
-            parameters = CRCL_MoveToParametersDataType()
-            parameters.EndPosition.pos.x = self.X_robot
-            parameters.EndPosition.pos.y = self.Y_robot
-            parameters.EndPosition.pos.z = 0.04
+            parameters = MoveToParametersSetDataType()
+            parameters.EndPosition.point.x = self.X_robot / 1000 # pose has to be in m
+            parameters.EndPosition.point.y = self.Y_robot / 1000 # pose has to be in m
+            parameters.EndPosition.point.z = 0.04
             parameters.EndPosition.xAxis.i = 0.707
             parameters.EndPosition.xAxis.j = 0.707
             parameters.EndPosition.xAxis.k = 0.0
@@ -118,15 +121,13 @@ class Kamera:
             parameters.EndPosition.zAxis.j = 0.0
             parameters.EndPosition.zAxis.k = -1.0
             pub.sendMessage("write_information_source", name="CameraPose", data=parameters)
-            pub.sendMessage("write_information_source", name="YellowPartDetected", data=self.yellow)
-            if self.yellow == False:
-                pub.sendMessage("write_information_source", name="GreyPartDetected", data=True)
-        else:
-            pub.sendMessage("write_information_source", name="GreyPartDetected", data=False)
-            pub.sendMessage("write_information_source", name="YellowPartDetected", data=False)
+        pub.sendMessage("write_information_source", name="YellowPartDetected", data=self.yellow)
+        pub.sendMessage("write_information_source", name="GreyPartDetected", data=self.grey)        
 
 
     def detect(self):
+        self.yellow = False
+        self.grey = False
 
         #undistort
         self.undist = cv.undistort(self.frame, self.kmat, self.dstmat, None, None)
@@ -138,25 +139,25 @@ class Kamera:
         #creating masks
         self.mask_grey = cv.inRange(self.hsv, self.lth_grey, self.hth_grey)
         self.mask_yellow = cv.inRange(self.hsv, self.lth_yellow, self.hth_yellow)
-        cv.imwrite("./configFiles/mask_grey.png", self.mask_grey)
-        cv.imwrite("./configFiles/mask_yellow.png", self.mask_yellow)
+        #cv.imwrite("./configFiles/mask_grey.png", self.mask_grey)
+        #cv.imwrite("./configFiles/mask_yellow.png", self.mask_yellow)
         self.circles = 0
         self.getCircles(self.mask_grey)
-        self.logger.info(f"Found {self.circles} circles with grey mask.")
+        #self.logger.info(f"Found {self.circles} circles with grey mask.")
 
         if self.circles is not None:
-            self.yellow = False
+            self.grey = True
             self.circles = np.uint16(np.around(self.circles))
             for i in self.circles[0, :]:
                 self.center = (i[0], i[1])
-                cv.circle(undist, self.center, 1, (0, 100, 100), 3)
+                cv.circle(self.undist, self.center, 1, (0, 100, 100), 3)
                 self.radius = i[2]
-                cv.circle(undist, self.center, self.radius, (255, 0, 255), 3)
+                cv.circle(self.undist, self.center, self.radius, (255, 0, 255), 3)
         else:
             self.getCircles(self.mask_yellow)
-            self.logger.info(f"Found {self.circles} circles with yellow mask.")
-            self.yellow = True
+            self.logger.debug(f"Found {self.circles} circles with yellow mask.")
             if self.circles is not None:
+                self.yellow = True
                 self.circles = np.uint16(np.around(self.circles))
                 for i in self.circles[0, :]:
                     self.center = (i[0], i[1])
@@ -166,27 +167,19 @@ class Kamera:
 
 
         #printing results
-        try:
+        if self.circles is not None:
             self.distx_px = abs(self.center[0] - self.origin[0])
             self.distx_py = abs(self.center[1] - self.origin[1])
             self.X = np.round(self.distx_px/self.mm , 1)
             self.Y = np.round(self.distx_py/self.mm , 1)
-            self.logger.info("Kamerakoordinaten: " ,X,"mm in X und",Y,"mm in Y")
+            self.logger.info(f"Kamerakoordinaten: {self.X} mm in X und {self.Y} mm in Y")
 
-            self.X_robot = np.round(self.X - 87.5 , 1)
-            self.Y_robot = np.round(self.Y + 210.0 , 1)
+            self.X_robot = np.round(self.X - 107.5 , 1)
+            self.Y_robot = np.round(self.Y + 240.0 , 1)
 
-            self.logger.info("Kooordinaten im Roboter Koordiantensystem: " ,self.X_robot,"mm in X und",self.Y_robot,"mm in Y")
-
-
-        except:
+            self.logger.info(f"Kooordinaten im Roboter Koordiantensystem: {self.X_robot} mm in X und {self.Y_robot} mm in Y")
+        else:
             print("No workpiece found!")
-
-        #display img
-        #cv.imshow("img" , self.undist)
-        #cv.waitKey(1000)
-        #writing img
-        #cv.imwrite("undist.png" ,self.undist)
 
 
 
