@@ -2,6 +2,7 @@ from pubsub import pub
 import yaml
 import time
 from urx import Robot
+from urx.robotiq_two_finger_gripper import Robotiq_Two_Finger_Gripper
 import math3d as m3d
 import numpy
 import logging
@@ -45,8 +46,11 @@ class SAMY_Robot():
         log_handler = logging.StreamHandler()
         log_handler.setFormatter(logging.Formatter("%(levelname)s %(filename)s - %(message)s"))
         self.logger.addHandler(log_handler)
+        
 
         self.robot = Robot(global_settings["Address"])
+        self.gripper = Robotiq_Two_Finger_Gripper(self.robot)
+        self.gripper.init_gripper()
         self.robot_settings = RobotSettings(global_settings["Name"])
         self.global_settings = global_settings
         self.robot_settings.read_global_settings(global_settings)
@@ -99,16 +103,21 @@ class SAMY_Robot():
 
     def set_end_effector(self, data):
         if data.Setting.fraction == 0.0:
-            self.robot.open_gripper()
-            self.logger.info("Opening Gripper")
+            #self.robot.open_gripper()
+            self.gripper.open_gripper()
+            #self.robot.send_program(self.gripper.ret_program_to_run())
+            self.logger.info("Open Gripper")
         else:
-            self.robot.close_gripper()
+            #self.robot.close_gripper()
+            self.gripper.close_gripper()
+            #self.robot.send_program(self.gripper.ret_program_to_run())
+            self.logger.info("Close Gripper")
             if self.robot.holds_object():
                 self.logger.info("Gripper is holding an Object.")
-                pub.sendMessage("write_information_source", name="GripperHoldsObject", data=True)
+                #pub.sendMessage("write_information_source", name="GripperHoldsObject", data=True)
             else:
                 self.logger.info("Gripper is empty. ")
-                pub.sendMessage("write_information_source", name="GripperHoldsObject", data=False)
+                #pub.sendMessage("write_information_source", name="GripperHoldsObject", data=False)
                 #pub.sendMessage("command_halt")
                 #time.sleep(1)
                 #pub.sendMessage("command_reset")
@@ -132,21 +141,14 @@ class SAMY_Robot():
     def crcl_pose_to_m3d_pose(self, crcl_pose):
         xaxis = numpy.array([crcl_pose.xAxis.i, crcl_pose.xAxis.j, crcl_pose.xAxis.k])
         zaxis = numpy.array([crcl_pose.zAxis.i, crcl_pose.zAxis.j, crcl_pose.zAxis.k])
-        yaxis = numpy.cross(zaxis, xaxis)
         trans = m3d.Transform()
-        trans.pos.x = (crcl_pose.point.x + self.robot_settings.workobject_m3d.pos.x)
-        trans.pos.y = (crcl_pose.point.y + self.robot_settings.workobject_m3d.pos.y)
-        trans.pos.z = (crcl_pose.point.z + self.robot_settings.workobject_m3d.pos.z)
-        trans.orient[0][0] = crcl_pose.xAxis.i
-        trans.orient[0][1] = crcl_pose.xAxis.j
-        trans.orient[0][2] = crcl_pose.xAxis.k
+        trans.pos.x = (crcl_pose.point.x)
+        trans.pos.y = (crcl_pose.point.y)
+        trans.pos.z = (crcl_pose.point.z)
+        trans.orient.from_xz(xaxis, zaxis)
 
-        trans.orient[1][0] = yaxis[0]
-        trans.orient[1][1] = yaxis[1]
-        trans.orient[1][2] = yaxis[2]
+        new_pose = self.robot_settings.workobject_m3d * trans
+        self.logger.info("New Pose after transformation")
+        self.logger.info(new_pose)
 
-        trans.orient[2][0] = crcl_pose.zAxis.i
-        trans.orient[2][1] = crcl_pose.zAxis.j
-        trans.orient[2][2] = crcl_pose.zAxis.k
-
-        return trans
+        return new_pose

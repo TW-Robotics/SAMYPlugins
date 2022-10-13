@@ -180,13 +180,43 @@ class Robotiq_Two_Finger_Gripper(object):
         urscript._set_gripper_force(self.force)
 
         # Initialize the gripper
+        #urscript._set_robot_activate()
+        #urscript._set_gripper_activate()
+
+        # Wait on activation to avoid USB conflicts
+        urscript._sleep(0.1)
+
+        return urscript
+
+    def init_gripper(self):
+        urscript = RobotiqScript(socket_host=self.socket_host,
+                            socket_port=self.socket_port,
+                            socket_name=self.socket_name)
+
+        # Set input and output voltage ranges
+        urscript._set_analog_inputrange(0, 0)
+        urscript._set_analog_inputrange(1, 0)
+        urscript._set_analog_inputrange(2, 0)
+        urscript._set_analog_inputrange(3, 0)
+        urscript._set_analog_outputdomain(0, 0)
+        urscript._set_analog_outputdomain(1, 0)
+        urscript._set_tool_voltage(0)
+        urscript._set_runstate_outputs()
+
+        # Set payload, speed and force
+        urscript._set_payload(self.payload)
+        urscript._set_gripper_speed(self.speed)
+        urscript._set_gripper_force(self.force)
+
+        # Initialize the gripper
         urscript._set_robot_activate()
         urscript._set_gripper_activate()
 
         # Wait on activation to avoid USB conflicts
         urscript._sleep(0.1)
 
-        return urscript
+        self.robot.send_program(urscript())
+        time.sleep(1)
 
     def gripper_action(self, value):
         """

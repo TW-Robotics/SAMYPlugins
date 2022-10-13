@@ -253,17 +253,17 @@ class Robot(URRobot):
                 num: Number of the gripper (1-4)
         """
 
-        # line = "rq_open_and_wait({})\n".format(num)
-        line = "set_digital_out(2, True)\n"
-        line3 = "set_digital_out(3, False)\n"
+        line = "rq_move_and_wait(0, 1)\n"
+        #line = "set_digital_out(2, True)\n"
+        #line3 = "set_digital_out(3, False)\n"
         #line2 = "sleep(6)\n"
-        self.send_program(line3)
-        time.sleep(0.1)
+        #self.send_program(line3)
+        #time.sleep(0.1)
         self.send_program(line)
         # if self.live_mode == False:
         #     self.send_program(line2)
         # else:
-        time.sleep(0.1)
+        #time.sleep(1)
         #self.send_command(line2)
 
     def close_gripper(self):
@@ -279,7 +279,7 @@ class Robot(URRobot):
         self.send_program(line3)
         time.sleep(0.1)
         self.send_program(line)
-        time.sleep(0.1)
+        time.sleep(1)
 
     def holds_object(self):
         time.sleep(2) # wait for the gripper to close
