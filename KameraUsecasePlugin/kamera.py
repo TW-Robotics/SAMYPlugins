@@ -112,9 +112,10 @@ class Kamera:
         self.detect()
         if self.X_robot != 0:
             parameters = MoveToParametersSetDataType()
+            parameters.MoveStraight = False
             parameters.EndPosition.point.x = self.X_robot / 1000 # pose has to be in m
             parameters.EndPosition.point.y = self.Y_robot / 1000 # pose has to be in m
-            parameters.EndPosition.point.z = 0.04
+            parameters.EndPosition.point.z = 0.05
             parameters.EndPosition.xAxis.i = 0.707
             parameters.EndPosition.xAxis.j = 0.707
             parameters.EndPosition.xAxis.k = 0.0
@@ -175,12 +176,12 @@ class Kamera:
             self.Y = np.round(self.distx_py/self.mm , 1)
             self.logger.info(f"Camera coordinates: {self.X} mm in X and {self.Y} mm in Y")
 
-            self.X_robot = np.round(self.X - 107.5 , 1)
-            self.Y_robot = np.round(self.Y + 240.0 , 1)
+            self.X_robot = np.round(self.X - 75.0 , 1)
+            self.Y_robot = np.round(self.Y + 220.0 , 1)
 
             self.logger.info(f"Robot coordinates: {self.X_robot} mm in X and {self.Y_robot} mm in Y")
         else:
-            print("No workpiece found!")
+            self.logger.error("No workpiece found!")
 
 
 
