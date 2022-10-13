@@ -7,6 +7,7 @@ import logging
 from mqtt import Mqtt
 #import paho.mqtt.client as paho_mqtt
 import threading
+from opcua import ua
 
 class SAMY_Robot():
     def __init__(self, global_settings):
@@ -34,14 +35,17 @@ class SAMY_Robot():
             response = self.mqtt.pull_data(self.global_settings["IOLinkAddress"], sensor["Port"])
             if sensor["Type"] == "DI":
                 if response["value"] == "00":
-                    pub.sendMessage("write_information_source", name=sensor["Name"], data=False)
+                    #dv = ua.DataValue(ua.Variant(0, ua.VariantType.Int32))
+                    pub.sendMessage("write_information_source", name=sensor["Name"], data=False) # False
                 else:
-                    pub.sendMessage("write_information_source", name=sensor["Name"], data=True)
+                    #dv = ua.DataValue(ua.Variant(1, ua.VariantType.Int32))
+                    pub.sendMessage("write_information_source", name=sensor["Name"], data=True) # True
             elif sensor["Type"] == "IO-Link":
                 value = int(response["value"][:4], 16) / 10
                 pub.sendMessage("write_information_source", name=sensor["Name"], data=value)
             else:
                 self.logger.error("Sensor type not valid!!")
+
 
 
         #pub.sendMessage("write_information_source", name="LightBarrier", data=bool(self.mqtt.lightbarrier_value))
@@ -56,4 +60,5 @@ class SAMY_Robot():
             else:
                 self.logger.info("Setting Port {} to False".format(joint.JointNumber))
                 self.mqtt.set_DO(self.global_settings["IOLinkAddress"], joint.JointNumber, 0)
+            time.sleep(1)
         
