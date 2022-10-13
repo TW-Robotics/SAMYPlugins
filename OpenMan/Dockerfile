@@ -20,20 +20,21 @@ RUN apt install -y ros-noetic-robotis-manipulator
 #Creating Dirs and build OpenManipulator packages
 RUN mkdir /usr/src/samy
 WORKDIR /usr/src/samy
-RUN mkdir catkin_ws
-RUN mkdir catkin_ws/src
-WORKDIR catkin_ws/src
-RUN git clone -b noetic-devel https://github.com/ROBOTIS-GIT/open_manipulator.git
-RUN git clone -b noetic-devel https://github.com/ROBOTIS-GIT/open_manipulator_msgs.git
-RUN git clone -b noetic-devel https://github.com/ROBOTIS-GIT/open_manipulator_simulations.git
-RUN git clone https://github.com/ROBOTIS-GIT/open_manipulator_dependencies.git
-RUN git clone https://github.com/ROBOTIS-GIT/open_manipulator_controls.git
+COPY . ./
+# RUN mkdir catkin_ws
+# RUN mkdir catkin_ws/src
+# WORKDIR catkin_ws/src
+# RUN git clone -b noetic-devel https://github.com/ROBOTIS-GIT/open_manipulator.git
+# RUN git clone -b noetic-devel https://github.com/ROBOTIS-GIT/open_manipulator_msgs.git
+# RUN git clone -b noetic-devel https://github.com/ROBOTIS-GIT/open_manipulator_simulations.git
+# RUN git clone https://github.com/ROBOTIS-GIT/open_manipulator_dependencies.git
+# RUN git clone https://github.com/ROBOTIS-GIT/open_manipulator_controls.git
 WORKDIR /usr/src/samy/catkin_ws
-RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd  /home/catkin_ws; catkin_make'
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd  /usr/src/samy/catkin_ws; catkin_make'
 
 #Copy config files
 WORKDIR /usr/src/samy
-COPY . ./
+
 
 ## Install custom opcua package and saymplugin package
 RUN pip3 install pip/opcua-0.98.13-py3-none-any.whl 

@@ -1,31 +1,27 @@
 #!/usr/bin/env python3
 import time
-import sys
-import copy
-import os
+from threading import Timer
+#import sys
+#import copy
+#import os
 #os.environ["ROS_NAMESPACE"] = "/dsr01h2017"
 import rospy
-import roslaunch
-import moveit_commander
-import moveit_msgs.msg
+#import roslaunch
+#import moveit_commander
+#import moveit_msgs.msg
 import geometry_msgs.msg
 from open_manipulator_msgs.msg import KinematicsPose, JointPosition
 from open_manipulator_msgs.srv import *
 
 from pytransform3d import rotations
-from pytransform3d import transformations
 import numpy
 import logging
-
-from moveit_commander.conversions import pose_to_list
-
 
 from pubsub import pub
 from samyplugin.CRCL_DataTypes import *
 
 import json
-import ast
-import copy
+#import ast
 
 
 ###class SamyRos###
@@ -53,6 +49,7 @@ class Samyros:
 
 ###CRCL functions###
     def move_to(self,data):
+        self.logger.info("Got MoveTo command")
         if data.MoveStraight:
             self.logger.error("MoveL is not supported")
         else:
@@ -71,6 +68,7 @@ class Samyros:
         joint_position.joint_name = ['gripper']
         joint_position.position = [data.Setting.fraction]
         response = goal_tool_control("", joint_position, 1)
+        time.sleep(2)
         
 
 ### Helper functions ###
@@ -105,19 +103,40 @@ class Samyros:
         pose_goal.pose.position.y = data.EndPosition.point.y
         pose_goal.pose.position.z = data.EndPosition.point.z
 
+        self.logger.info("Info: Goal pose: ")
+        self.logger.info("x: %f",pose_goal.pose.position.x)
+        self.logger.info("y: %f",pose_goal.pose.position.y)
+        self.logger.info("z: %f",pose_goal.pose.position.z)
+        self.logger.info("qx: %f",pose_goal.pose.orientation.x)
+        self.logger.info("qy: %f",pose_goal.pose.orientation.y)
+        self.logger.info("qz: %f",pose_goal.pose.orientation.z)
+        self.logger.info("qw: %f",pose_goal.pose.orientation.w)
+
+    
+        timeout = 2
+        rospy.wait_for_service('goal_task_space_path')
         set_kinematics_pose = rospy.ServiceProxy('goal_task_space_path', SetKinematicsPose)
+        self.logger.info("Set goal")
         response = set_kinematics_pose("", "gripper", pose_goal, 4)
+        self.logger.info(f"Goal Set. Response: {response.is_planned}")
+        if ( not response.is_planned):
+            self.logger.warn("Failed to set pose.")
+            return
 
-        print("Info: Goal pose: ")
-        print("x: ",pose_goal.pose.position.x)
-        print("y: ",pose_goal.pose.position.y)
-        print("z: ",pose_goal.pose.position.z)
-        print("qx: ",pose_goal.pose.orientation.x)
-        print("qy: ",pose_goal.pose.orientation.y)
-        print("qz: ",pose_goal.pose.orientation.z)
-        print("qw: ",pose_goal.pose.orientation.w)
+        goal_reached = False
+        self.logger.info("Wait for robot to reach goal... ")
+        while(not goal_reached):
+            if (abs((data.EndPosition.point.x - self.current_pose.point.x)) < 0.015 and
+                abs((data.EndPosition.point.y - self.current_pose.point.y)) < 0.015 and
+                abs((data.EndPosition.point.z - self.current_pose.point.z)) < 0.02):
+                goal_reached = True
+        time.sleep(1)
 
-        # Call rosservice for open_manipulator
+        self.logger.info("Current Pose:")
+        self.logger.info("x: %f",self.current_pose.point.x)
+        self.logger.info("y: %f",self.current_pose.point.y)
+        self.logger.info("z: %f",self.current_pose.point.z)
+
 
             
             
