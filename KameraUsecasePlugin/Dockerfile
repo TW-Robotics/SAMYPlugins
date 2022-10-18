@@ -14,7 +14,7 @@ RUN apt upgrade -y
 RUN apt install -y build-essential python3 python3-pip apt-utils libgl1 libglib2.0-0 libusb-1.0-0-dev udev
 #RUN apt install -y libopencv-dev python3-opencv
 RUN pip3 install opencv-python-headless pyrealsense2 numpy pypubsub requests scipy ipython python-dateutil pytz lxml cryptography pyyaml
-
+RUN apt install -y ffmpeg
 ## copy files into image
 RUN mkdir /usr/src/samy
 WORKDIR /usr/src/samy

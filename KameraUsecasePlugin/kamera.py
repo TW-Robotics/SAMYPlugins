@@ -48,9 +48,9 @@ class Kamera:
         if not self.selected_devices:
             priself.logger.infont("No RealSense device is connected!")
 
-        self.rgb_sensor = self.depth_sensor = None
+        self.rgb_sensor = None
 
-        for device in self.selected_devices:                         
+        for device in self.selected_devices:
             self.logger.info(f"Required sensors for device: {device.get_info(rs.camera_info.name)}")
             for s in device.sensors:                   # Show available sensors in each device
                 if s.get_info(rs.camera_info.name) == 'RGB Camera':
@@ -65,7 +65,7 @@ class Kamera:
 
         self.pipe = rs.pipeline()
         cfg = rs.config() 
-        cfg.enable_stream(rs.stream.color, 1920, 1080, rs.format.bgr8, 30) # set resolution and std rgb format 
+        cfg.enable_stream(rs.stream.color, 1920, 1080, rs.format.bgr8, 6) # set resolution and std rgb format 
         profile = self.pipe.start(cfg)
         self.frame = None
 
@@ -115,7 +115,7 @@ class Kamera:
             parameters.MoveStraight = False
             parameters.EndPosition.point.x = self.X_robot / 1000 # pose has to be in m
             parameters.EndPosition.point.y = self.Y_robot / 1000 # pose has to be in m
-            parameters.EndPosition.point.z = 0.05
+            parameters.EndPosition.point.z = 0.035
             parameters.EndPosition.xAxis.i = 0.707
             parameters.EndPosition.xAxis.j = 0.707
             parameters.EndPosition.xAxis.k = 0.0
