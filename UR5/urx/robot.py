@@ -272,17 +272,18 @@ class Robot(URRobot):
                 num: Number of the gripper (1-4)
         """
         # if 1 <= num <= 4:
-        line = "set_digital_out(3, True)\n"
-        line3 = "set_digital_out(2, False)\n"
-        line2 = "sleep(6)\n"
+        # line = "set_digital_out(3, True)\n"
+        # line3 = "set_digital_out(2, False)\n"
+        # line2 = "sleep(6)\n"
+        line = "rq_move_and_wait(255, 1)\n"
         # line = "rq_close_and_wait({})\n".format(num)
-        self.send_program(line3)
-        time.sleep(0.1)
+        # self.send_program(line3)
+        # time.sleep(0.1)
         self.send_program(line)
-        time.sleep(1)
+        time.sleep(0.1)
 
     def holds_object(self):
-        time.sleep(2) # wait for the gripper to close
+        time.sleep(0.5) # wait for the gripper to close
 
         bit = self.get_digital_out(0, wait=False)
         if bit == 1:
