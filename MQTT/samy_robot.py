@@ -53,12 +53,12 @@ class SAMY_Robot():
         #pub.sendMessage("write_information_source", name="InductiveSensor", data=self.mqtt.inductive_value)
 
     def set_actuators(self, data):
-        for joint in data.ActuateJoint:
-            if joint.JointPosition > 0:
-                self.logger.info("Setting Port {} to True".format(joint.JointNumber))
-                self.mqtt.set_DO(self.global_settings["IOLinkAddress"], joint.JointNumber, 1)
+        for joint in data.actuateJoint:
+            if joint.jointPosition > 0:
+                self.logger.info("Setting Port {} to True".format(joint.jointNumber))
+                self.mqtt.set_DO(self.global_settings["IOLinkAddress"], joint.jointNumber, 1)
             else:
-                self.logger.info("Setting Port {} to False".format(joint.JointNumber))
-                self.mqtt.set_DO(self.global_settings["IOLinkAddress"], joint.JointNumber, 0)
+                self.logger.info("Setting Port {} to False".format(joint.jointNumber))
+                self.mqtt.set_DO(self.global_settings["IOLinkAddress"], joint.jointNumber, 0)
             time.sleep(1)
         
