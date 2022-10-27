@@ -68,13 +68,13 @@ class SAMY_Robot():
         pub.subscribe(self.stop_robot, "StopMotion")
 
     def popup(self, data):
-        self.robot.send_message(str(data.Message))
+        self.robot.send_message(str(data.message))
 
     def move_to(self, data):
         self.logger.info("Got MoveTo")
-        trans = self.crcl_pose_to_m3d_pose(data.EndPosition)
+        trans = self.crcl_pose_to_m3d_pose(data.endPosition)
 
-        if data.MoveStraight:
+        if data.moveStraight:
             command = "movel"
         else:
             command = "movej"
@@ -95,14 +95,14 @@ class SAMY_Robot():
             Input parameters:
                 dwell_time: time the robot waits
         """
-        line = "sleep({})\n".format(data.DwellTime)
+        line = "sleep({})\n".format(data.dwellTime)
         self.robot.send_program(line)
 
     def send_status(self, data):
         self.logger.info("Not supported")
 
     def set_end_effector(self, data):
-        if data.Setting.fraction == 0.0:
+        if data.setting.fraction == 0.0:
             #self.robot.open_gripper()
             self.gripper.open_gripper()
             #self.robot.send_program(self.gripper.ret_program_to_run())
@@ -123,14 +123,14 @@ class SAMY_Robot():
                 #pub.sendMessage("command_reset")
 
     def set_trans_accel(self, data):
-        if data.TransAccel.switchField == 1:
+        if data.transAccel.switchField == 1:
             self.robot_settings.transAccel = data.TransAccel.unionValue.setting
         else:
             self.logger.info("Setting transAccel as fraction is not supported")
 
     def set_trans_speed(self, data):
-        if data.TransSpeed.switchField == 1:
-            self.robot_settings.transSpeed = data.TransSpeed.unionValue.setting
+        if data.transSpeed.switchField == 1:
+            self.robot_settings.transSpeed = data.transSpeed.unionValue.setting
         else:
             self.logger.info("Setting transSpeed as fraction is not supported")
 

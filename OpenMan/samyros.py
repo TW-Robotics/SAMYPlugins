@@ -50,7 +50,7 @@ class Samyros:
 ###CRCL functions###
     def move_to(self,data):
         self.logger.info("Got MoveTo command")
-        if data.MoveStraight:
+        if data.moveStraight:
             self.logger.error("MoveL is not supported")
         else:
             self.movej(data)
@@ -66,7 +66,7 @@ class Samyros:
         goal_tool_control = rospy.ServiceProxy('goal_tool_control', SetJointPosition)
         joint_position = JointPosition()
         joint_position.joint_name = ['gripper']
-        joint_position.position = [data.Setting.fraction]
+        joint_position.position = [data.setting.fraction]
         response = goal_tool_control("", joint_position, 1)
         time.sleep(2)
         
@@ -88,8 +88,8 @@ class Samyros:
 
     def movej(self,data):
         pose_goal = KinematicsPose()
-        xaxis = numpy.array([data.EndPosition.xAxis.i, data.EndPosition.xAxis.j, data.EndPosition.xAxis.k])
-        zaxis = numpy.array([data.EndPosition.zAxis.i, data.EndPosition.zAxis.j, data.EndPosition.zAxis.k])
+        xaxis = numpy.array([data.endPosition.xAxis.i, data.endPosition.xAxis.j, data.endPosition.xAxis.k])
+        zaxis = numpy.array([data.endPosition.zAxis.i, data.endPosition.zAxis.j, data.endPosition.zAxis.k])
         yaxis = numpy.cross(zaxis, xaxis)
         
         rot = rotations.matrix_from_two_vectors(xaxis,yaxis)
@@ -99,9 +99,9 @@ class Samyros:
         pose_goal.pose.orientation.y = qy
         pose_goal.pose.orientation.z = qz
         pose_goal.pose.orientation.w = qw
-        pose_goal.pose.position.x = data.EndPosition.point.x
-        pose_goal.pose.position.y = data.EndPosition.point.y
-        pose_goal.pose.position.z = data.EndPosition.point.z
+        pose_goal.pose.position.x = data.endPosition.point.x
+        pose_goal.pose.position.y = data.endPosition.point.y
+        pose_goal.pose.position.z = data.endPosition.point.z
 
         self.logger.info("Info: Goal pose: ")
         self.logger.info("x: %f",pose_goal.pose.position.x)
@@ -126,9 +126,9 @@ class Samyros:
         goal_reached = False
         self.logger.info("Wait for robot to reach goal... ")
         while(not goal_reached):
-            if (abs((data.EndPosition.point.x - self.current_pose.point.x)) < 0.015 and
-                abs((data.EndPosition.point.y - self.current_pose.point.y)) < 0.015 and
-                abs((data.EndPosition.point.z - self.current_pose.point.z)) < 0.02):
+            if (abs((data.endPosition.point.x - self.current_pose.point.x)) < 0.015 and
+                abs((data.endPosition.point.y - self.current_pose.point.y)) < 0.015 and
+                abs((data.endPosition.point.z - self.current_pose.point.z)) < 0.02):
                 goal_reached = True
         time.sleep(1)
 
