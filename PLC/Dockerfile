@@ -18,7 +18,7 @@ RUN mkdir /usr/src/samy
 WORKDIR /usr/src/samy
 COPY . ./
 RUN pip3 install pip/opcua-0.98.13-py3-none-any.whl
-RUN pip3 install pip/samyplugin-0.2-py3-none-any.whl
+RUN pip3 install pip/samyplugin-0.3-py3-none-any.whl
 
 ## start plugin (get ip address from docker)
 

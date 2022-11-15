@@ -22,7 +22,7 @@ COPY . ./
 
 ## Install custom opcua package and saymplugin package
 RUN pip3 install pip/opcua-0.98.13-py3-none-any.whl 
-RUN pip3 install pip/samyplugin-0.2-py3-none-any.whl
+RUN pip3 install pip/samyplugin-0.3-py3-none-any.whl
 RUN ./setup_udev_rules.sh
 
 
