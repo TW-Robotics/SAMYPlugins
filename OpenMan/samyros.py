@@ -51,7 +51,8 @@ class Samyros:
     def move_to(self,data):
         self.logger.info("Got MoveTo command")
         if data.moveStraight:
-            self.logger.error("MoveL is not supported")
+            self.movej(data)
+            #self.logger.error("MoveL is not supported")
         else:
             self.movej(data)
             
