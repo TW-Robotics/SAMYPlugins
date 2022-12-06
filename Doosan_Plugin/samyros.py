@@ -141,20 +141,22 @@ class Samyros:
 
 ###CRCL functions###
 
+
+#ROS Services laut: http://wiki.ros.org/doosan-robotics?action=AttachFile&do=get&target=%EC%9D%BC%EB%B0%98%EB%B9%84_Doosan_Robotics_ROS_Manual_v1.13_EN.pdf
 #Greifer öffnen an Pin X
     def open_gripper(self):
         pin = 0 
-        setTool = rospy.ServiceProxy('SetToolDigitalOutput.srv', SetToolDigitalOutput.srv)
+        setToolopen = rospy.ServiceProxy('SetToolDigitalOutput.srv', SetToolDigitalOutput.srv)
         try:
-            setTool(pin,0)
+            setToolopen(pin,0)
         except rospy.ServiceException as exc:
             print("Greifer wurde nicht geöffnet! Grund: " + str(exc)
  #Greifer schließen an Pin X
     def close_gripper(self):
         pin = 0 
-        setTool = rospy.ServiceProxy('SetToolDigitalOutput.srv', SetToolDigitalOutput.srv)
+        setToolclose = rospy.ServiceProxy('SetToolDigitalOutput.srv', SetToolDigitalOutput.srv)
         try:
-            setTool(pin,1)
+            setToolclose(pin,1)
         except rospy.ServiceException as exc:
             print("Greifer wurde nicht geschlossen! Grund: " + str(exc))
                   
