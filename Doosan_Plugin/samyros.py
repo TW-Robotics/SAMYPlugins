@@ -140,6 +140,38 @@ class Samyros:
 
 
 ###CRCL functions###
+
+#Greifer öffnen an Pin X
+    def open_gripper(self):
+        pin = 0 
+        setTool = rospy.ServiceProxy('SetToolDigitalOutput.srv', SetToolDigitalOutput.srv)
+        try:
+            setTool(pin,0)
+        except rospy.ServiceException as exc:
+            print("Greifer wurde nicht geöffnet! Grund: " + str(exc)
+ #Greifer schließen an Pin X
+    def close_gripper(self):
+        pin = 0 
+        setTool = rospy.ServiceProxy('SetToolDigitalOutput.srv', SetToolDigitalOutput.srv)
+        try:
+            setTool(pin,1)
+        except rospy.ServiceException as exc:
+            print("Greifer wurde nicht geschlossen! Grund: " + str(exc))
+                  
+ #Lichtschranke auslesen an Pin X                 
+    def get_lichtschranke(self):
+        pin = 0
+        getLichtschranke = rospy.ServiceProxy('GetCtlBoxDigitalInput.srv', GetCtlBoxDigitalInput.srv)
+        try:
+            wert,erfolgreich = getLichtschranke(pin)
+            return wert
+        except rospy.ServiceException as exc:
+            print("Der Wert der Lichtschranke konnte nicht ausgelesen werden! Grund: " + str(exc))
+        
+        
+        
+        
+
     def move_to(self,data):
         if data.MoveStraight:
             self.movel(data)
