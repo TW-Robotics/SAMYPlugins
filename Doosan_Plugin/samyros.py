@@ -104,6 +104,7 @@ class Samyros:
         #Subscribe
         pub.subscribe(self.move_to, "MoveTo")
         pub.subscribe(self.GetStatus, "GetStatus")
+        pub.subscribe(self.SetGripper, "SetEndeffector")
 
         #Debug
         self.cp = self.move_group.get_current_pose().pose
@@ -142,19 +143,25 @@ class Samyros:
 ###CRCL functions###
 
 
+    def SetGripper(self,data):
+    	if(data.setting.fraction>0):
+    	    self.close_gripper()
+    	else:
+    	    self.open_gripper()
+
 #ROS Services laut: http://wiki.ros.org/doosan-robotics?action=AttachFile&do=get&target=%EC%9D%BC%EB%B0%98%EB%B9%84_Doosan_Robotics_ROS_Manual_v1.13_EN.pdf
 #Greifer öffnen an Pin X
     def open_gripper(self):
-        pin = 0 
-        setToolopen = rospy.ServiceProxy('SetToolDigitalOutput.srv', SetToolDigitalOutput.srv)
+        pin = 4
+        setToolopen = rospy.ServiceProxy('SetCtlBoxDigitalOutput.srv', SetCtlBoxDigitalOutput.srv)
         try:
             setToolopen(pin,0)
         except rospy.ServiceException as exc:
             print("Greifer wurde nicht geöffnet! Grund: " + str(exc)
  #Greifer schließen an Pin X
     def close_gripper(self):
-        pin = 0 
-        setToolclose = rospy.ServiceProxy('SetToolDigitalOutput.srv', SetToolDigitalOutput.srv)
+        pin = 4 
+        setToolclose = rospy.ServiceProxy('SetCtlBoxDigitalOutput.srv', SetCtlBoxDigitalOutput.srv)
         try:
             setToolclose(pin,1)
         except rospy.ServiceException as exc:
@@ -162,7 +169,7 @@ class Samyros:
                   
  #Lichtschranke auslesen an Pin X                 
     def get_lichtschranke(self):
-        pin = 0
+        pin = 15
         getLichtschranke = rospy.ServiceProxy('GetCtlBoxDigitalInput.srv', GetCtlBoxDigitalInput.srv)
         try:
             wert,erfolgreich = getLichtschranke(pin)
@@ -182,10 +189,16 @@ class Samyros:
 
     def GetStatus(self,data):
         crcldata = CRCL_PoseDataType()
+        lichtschranke_data = CRCL_FractionDataType()
         self.cp = self.move_group.get_current_pose().pose
         try:
             q = numpy.array([self.cp.orientation.w,self.cp.orientation.x,self.cp.orientation.y,self.cp.orientation.z])
             rot = rotations.matrix_from_quaternion(q)
+            crcldata.name = "currentPoseDoosan"
+            crcldata.id = 1
+            crcldata.point.name = "point"
+            crcldata.xAxis.name = "xaxis"
+            crcldata.zAxis.name = "zaxis"
             crcldata.xAxis.i = rot[0,0]
             crcldata.xAxis.j = rot[0,1]
             crcldata.xAxis.k = rot[0,2]
@@ -195,7 +208,12 @@ class Samyros:
             crcldata.point.x = self.cp.position.x
             crcldata.point.y = self.cp.position.y
             crcldata.point.z = self.cp.position.z
-            pub.sendMessage("write_information_source", name="current_pose",  data=crcldata)
+            lichtschranke_data.name = "LichtschrankeDoosan"
+            lichtschranke_data.fraction = self.get_lichtschranke()
+            lichtschranke_data.fractionMin = 0
+            lichtschranke_data.fractionMax = 10
+            pub.sendMessage("write_information_source", name="currentPoseDoosan",  data=crcldata)
+            pub.sendMessage("write_information_source", name="LichtschrankeDoosan",  data=lichtschranke_data)
         except:
             print("Error: Pose-Callback failed!")
 
