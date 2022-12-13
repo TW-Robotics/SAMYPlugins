@@ -17,6 +17,7 @@ import numpy
 from moveit_commander.conversions import pose_to_list
 from pubsub import pub
 from samyplugin.CRCL_DataTypes import *
+from time import sleep
 
 import json
 import ast
@@ -105,6 +106,7 @@ class Samyros:
         pub.subscribe(self.move_to, "MoveTo")
         pub.subscribe(self.GetStatus, "GetStatus")
         pub.subscribe(self.SetGripper, "SetEndeffector")
+        pub.subscribe(self.CheckPalette, "EnableSensor")
 
         #Debug
         self.cp = self.move_group.get_current_pose().pose
@@ -171,14 +173,33 @@ class Samyros:
     def get_lichtschranke(self):
         pin = 15
         getLichtschranke = rospy.ServiceProxy('GetCtlBoxDigitalInput.srv', GetCtlBoxDigitalInput.srv)
+        while(True):
+		    try:
+		        wert,erfolgreich = getLichtschranke(pin)
+		        if wert == 1:
+		        	sleep(0.1)
+		        	return wert
+		    except rospy.ServiceException as exc:
+		        print("Der Wert der Lichtschranke konnte nicht ausgelesen werden! Grund: " + str(exc))
+        
+        
+    def checkPalette(self,data):
+		pin = 9
+		wert = -1 
+		getPaletteLinks = rospy.ServiceProxy('GetCtlBoxDigitalInput.srv', GetCtlBoxDigitalInput.srv) 
+		try:
+			wert, erfolgreich = getPaletteLinks(pin)
+		except rospy.ServiceException as exc:
+		        print("Der Wert der Palette Links konnte nicht ausgelesen werden! Grund: " + str(exc))
+		palette_data = CRCL_FractionDataType()
+		palette_data.name = "PaletteLinks"
+        palette_data.fraction = wert
+        palette_data.fractionMin = 0
+        palette_data.fractionMax = 10
         try:
-            wert,erfolgreich = getLichtschranke(pin)
-            return wert
-        except rospy.ServiceException as exc:
-            print("Der Wert der Lichtschranke konnte nicht ausgelesen werden! Grund: " + str(exc))
-        
-        
-        
+			pub.sendMessage("write_information_source", name="LichtschrankeDoosan",  data=lichtschranke_data)
+		except:
+			print("Palette Links konnt nicht ausgelesen werden!")
         
 
     def move_to(self,data):
