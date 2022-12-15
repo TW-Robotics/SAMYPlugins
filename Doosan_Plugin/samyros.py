@@ -23,6 +23,21 @@ import json
 import ast
 import copy
 
+from dsr_msgs.msg import *
+from dsr_msgs.srv import *
+#from dsr_msgs import Robotiq2FOpen
+
+# for single robot 
+ROBOT_ID     = "dsr01"
+ROBOT_MODEL  = "h2017"
+# __dsr__id = ""
+# __dsr__model = ""
+
+# __dsr__id = ROBOT_ID
+# __dsr__model = ROBOT_MODEL
+# from DSR_ROBOT import *
+
+
 
 ###class SamyRos###
 ###used to connect ROS with Moveit with the SamyCore###
@@ -40,7 +55,6 @@ class Samyros:
         self.constr = moveit_msgs.msg.Constraints()
         #self.joint_constr = moveit_msgs.msg.JointConstraint()        
         self.constr.name = "Joint_Constrains"
-        
         
         
         #Constrain Joint 1
@@ -106,7 +120,7 @@ class Samyros:
         pub.subscribe(self.move_to, "MoveTo")
         pub.subscribe(self.GetStatus, "GetStatus")
         pub.subscribe(self.SetGripper, "SetEndeffector")
-        pub.subscribe(self.CheckPalette, "EnableSensor")
+        pub.subscribe(self.checkPalette, "EnableSensor")
 
         #Debug
         self.cp = self.move_group.get_current_pose().pose
@@ -155,62 +169,64 @@ class Samyros:
 #Greifer öffnen an Pin X
     def open_gripper(self):
         pin = 4
-        setToolopen = rospy.ServiceProxy('SetCtlBoxDigitalOutput.srv', SetCtlBoxDigitalOutput.srv)
+        #srv_robotiq_2f_open = rospy.ServiceProxy('/' + ROBOT_ID + ROBOT_MODEL + '/gripper/robotiq_2f_open', Robotiq2FOpen) 
+        setToolopen = rospy.ServiceProxy('/dsr01h2017/io/set_digital_output', SetCtrlBoxDigitalOutput)
         try:
-            setToolopen(pin,0)
+            setToolopen(pin,1)
         except rospy.ServiceException as exc:
-            print("Greifer wurde nicht geöffnet! Grund: " + str(exc)
+            print("Greifer wurde nicht geöffnet! Grund: " + str(exc))
+ 
  #Greifer schließen an Pin X
     def close_gripper(self):
         pin = 4 
-        setToolclose = rospy.ServiceProxy('SetCtlBoxDigitalOutput.srv', SetCtlBoxDigitalOutput.srv)
+        setToolclose = rospy.ServiceProxy('/dsr01h2017/io/set_digital_output', SetCtrlBoxDigitalOutput)
         try:
-            setToolclose(pin,1)
+            setToolclose(pin,0)
         except rospy.ServiceException as exc:
             print("Greifer wurde nicht geschlossen! Grund: " + str(exc))
                   
  #Lichtschranke auslesen an Pin X                 
     def get_lichtschranke(self):
         pin = 15
-        getLichtschranke = rospy.ServiceProxy('GetCtlBoxDigitalInput.srv', GetCtlBoxDigitalInput.srv)
+        getLichtschranke = rospy.ServiceProxy('/dsr01h2017/io/get_digital_input', GetCtrlBoxDigitalOutput)
         while(True):
-		    try:
-		        wert,erfolgreich = getLichtschranke(pin)
-		        if wert == 1:
-		        	sleep(0.1)
-		        	return wert
-		    except rospy.ServiceException as exc:
-		        print("Der Wert der Lichtschranke konnte nicht ausgelesen werden! Grund: " + str(exc))
+            try:
+                response = getLichtschranke(pin)
+                wert = response.value
+                print("Value Lichtschranke: " + str(response.value))
+                if wert == 1:
+                    sleep(0.1)
+                    return wert == 1
+            except rospy.ServiceException as exc:
+                print("Der Wert der Lichtschranke konnte nicht ausgelesen werden! Grund: " + str(exc))
         
         
-    def checkPalette(self,data):
-		pin = 9
-		wert = -1 
-		getPaletteLinks = rospy.ServiceProxy('GetCtlBoxDigitalInput.srv', GetCtlBoxDigitalInput.srv) 
-		try:
-			wert, erfolgreich = getPaletteLinks(pin)
-		except rospy.ServiceException as exc:
-		        print("Der Wert der Palette Links konnte nicht ausgelesen werden! Grund: " + str(exc))
-		palette_data = CRCL_FractionDataType()
-		palette_data.name = "PaletteLinks"
-        palette_data.fraction = wert
-        palette_data.fractionMin = 0
-        palette_data.fractionMax = 10
+    def checkPalette(self, data):
+        pin = 9
+        wert = -1 
+        getPaletteLinks = rospy.ServiceProxy('/dsr01h2017/io/get_digital_input', GetCtrlBoxDigitalInput) 
         try:
-			pub.sendMessage("write_information_source", name="LichtschrankeDoosan",  data=lichtschranke_data)
-		except:
-			print("Palette Links konnt nicht ausgelesen werden!")
+            response = getPaletteLinks(pin)
+            wert = response.value
+            print("Value checkPallet: " + str(response.value))
+        except rospy.ServiceException as exc:
+		        print("Der Wert der Palette Links konnte nicht ausgelesen werden! Grund: " + str(exc))
+        palette_data = wert == 1
+        try:
+        	pub.sendMessage("write_information_source", name="LichtschrankePalletDoosan",  data=palette_data)
+        except:
+        	print("Palette Links konnt nicht ausgelesen werden!")
         
 
-    def move_to(self,data):
-        if data.MoveStraight:
+    def move_to(self, data):
+        if data.moveStraight:
             self.movel(data)
         else:
             self.movej(data)
 
-    def GetStatus(self,data):
+    def GetStatus(self, data):
         crcldata = CRCL_PoseDataType()
-        lichtschranke_data = CRCL_FractionDataType()
+        lichtschranke_data = False
         self.cp = self.move_group.get_current_pose().pose
         try:
             q = numpy.array([self.cp.orientation.w,self.cp.orientation.x,self.cp.orientation.y,self.cp.orientation.z])
@@ -229,12 +245,9 @@ class Samyros:
             crcldata.point.x = self.cp.position.x
             crcldata.point.y = self.cp.position.y
             crcldata.point.z = self.cp.position.z
-            lichtschranke_data.name = "LichtschrankeDoosan"
-            lichtschranke_data.fraction = self.get_lichtschranke()
-            lichtschranke_data.fractionMin = 0
-            lichtschranke_data.fractionMax = 10
+            lichtschranke_data = self.get_lichtschranke() # waits for a box to be available 
             pub.sendMessage("write_information_source", name="currentPoseDoosan",  data=crcldata)
-            pub.sendMessage("write_information_source", name="LichtschrankeDoosan",  data=lichtschranke_data)
+            #pub.sendMessage("write_information_source", name="LichtschrankeDoosan",  data=lichtschranke_data)
         except:
             print("Error: Pose-Callback failed!")
 
@@ -244,21 +257,22 @@ class Samyros:
     def movej(self,data):
         self.move_group.clear_pose_targets()
         pose_goal = geometry_msgs.msg.Pose()
-        xaxis = numpy.array([data.EndPosition.xAxis.i, data.EndPosition.xAxis.j, data.EndPosition.xAxis.k])
-        zaxis = numpy.array([data.EndPosition.zAxis.i, data.EndPosition.zAxis.j, data.EndPosition.zAxis.k])
+        xaxis = numpy.array([data.endPosition.xAxis.i, data.endPosition.xAxis.j, data.endPosition.xAxis.k])
+        zaxis = numpy.array([data.endPosition.zAxis.i, data.endPosition.zAxis.j, data.endPosition.zAxis.k])
         yaxis = numpy.cross(zaxis, xaxis)
 
         try:
             rot = rotations.matrix_from_two_vectors(xaxis,yaxis)
             qw,qx,qy,qz = rotations.quaternion_from_matrix(rot)
 
+
             pose_goal.orientation.x = qx
             pose_goal.orientation.y = qy
             pose_goal.orientation.z = qz
             pose_goal.orientation.w = qw
-            pose_goal.position.x = data.EndPosition.point.x
-            pose_goal.position.y = data.EndPosition.point.y
-            pose_goal.position.z = data.EndPosition.point.z
+            pose_goal.position.x = data.endPosition.point.x
+            pose_goal.position.y = data.endPosition.point.y
+            pose_goal.position.z = data.endPosition.point.z
             print("Info: Goal pose: ")
             print("x: ",pose_goal.position.x)
             print("y: ",pose_goal.position.y)
@@ -282,23 +296,35 @@ class Samyros:
 
 
 
-    def movel(self,data):
+    def movel(self, data):
         self.move_group.clear_pose_targets()
         waypoints = []
         wpose = geometry_msgs.msg.Pose()
         self.cp = self.move_group.get_current_pose().pose
 
-        wpose.position.x = data.EndPosition.point.x
-        wpose.position.y = data.EndPosition.point.y
-        wpose.position.z = data.EndPosition.point.z
-        wpose.orientation.x = self.cp.orientation.x
-        wpose.orientation.y = self.cp.orientation.y
-        wpose.orientation.z = self.cp.orientation.z
-        wpose.orientation.w = self.cp.orientation.w
+        wpose.position.x = data.endPosition.point.x
+        wpose.position.y = data.endPosition.point.y
+        wpose.position.z = data.endPosition.point.z
+       
+        xaxis = numpy.array([data.endPosition.xAxis.i, data.endPosition.xAxis.j, data.endPosition.xAxis.k])
+        zaxis = numpy.array([data.endPosition.zAxis.i, data.endPosition.zAxis.j, data.endPosition.zAxis.k])
+        yaxis = numpy.cross(zaxis, xaxis)
+        rot = rotations.matrix_from_two_vectors(xaxis,yaxis)
+        qw,qx,qy,qz = rotations.quaternion_from_matrix(rot)
+
+        print("EULER Intrinsic ZYZ")
+        print(rotations.intrinsic_euler_zyz_from_active_matrix(rot))
+        print("!!!!!!!!!!!!!!!!!!!")
+
+        wpose.orientation.x = qx
+        wpose.orientation.y = qy
+        wpose.orientation.z = qz
+        wpose.orientation.w = qw
+
         waypoints.append(copy.deepcopy(wpose))
         self.move_group.set_start_state_to_current_state()
 
-        plan, _ = self.move_group.compute_cartesian_path(waypoints, 0.01, 0.0, avoid_collisions = True)  #waypoints, steps, jump treshold
+        plan, _ = self.move_group.compute_cartesian_path(waypoints, 0.1, 0.0, avoid_collisions = True)  #waypoints, steps, jump treshold
         print("Plan = {}".format(plan))
         self.move_group.execute(plan, wait=True)
         while(True):
@@ -308,6 +334,3 @@ class Samyros:
             time.sleep(0.5)
         self.move_group.stop()
         self.move_group.clear_pose_targets()
-
-        
-
