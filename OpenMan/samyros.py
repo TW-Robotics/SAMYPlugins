@@ -66,7 +66,13 @@ class Samyros:
         goal_tool_control = rospy.ServiceProxy('goal_tool_control', SetJointPosition)
         joint_position = JointPosition()
         joint_position.joint_name = ['gripper']
-        joint_position.position = [data.setting.fraction]
+        if ( data.setting.fraction > 0):
+            print("Setting gripper to 0.01")
+            joint_position.position = [-0.01]
+        else:
+            print("Setting gripper to -0.01")
+            joint_position.position = [0.01]
+        #joint_position.position = [data.setting.fraction]
         response = goal_tool_control("", joint_position, 1)
         time.sleep(2)
         

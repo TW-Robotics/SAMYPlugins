@@ -13,7 +13,8 @@ RUN apt update -y
 RUN apt upgrade -y
 RUN apt install -y build-essential python3 python3-pip apt-utils libgl1 libglib2.0-0 libusb-1.0-0-dev udev
 #RUN apt install -y libopencv-dev python3-opencv
-RUN pip3 install opencv-python-headless pyrealsense2 numpy pypubsub requests scipy ipython python-dateutil pytz lxml cryptography pyyaml
+RUN pip3 install opencv-python-headless numpy pypubsub requests scipy ipython python-dateutil pytz lxml cryptography pyyaml
+#RUN pip3 install pyrealsense2
 RUN apt install -y ffmpeg
 ## copy files into image
 RUN mkdir /usr/src/samy
@@ -23,6 +24,7 @@ COPY . ./
 ## Install custom opcua package and saymplugin package
 RUN pip3 install pip/opcua-0.98.13-py3-none-any.whl 
 RUN pip3 install pip/samyplugin-0.3-py3-none-any.whl
+RUN pip3 install pip/pyrealsense2-2.53.1.4623-cp38-cp38-manylinux1_x86_64.whl
 RUN ./setup_udev_rules.sh
 
 
