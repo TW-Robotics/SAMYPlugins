@@ -111,17 +111,18 @@ class Kamera:
         self.get_frame_from_camera()
         self.detect()
         if self.X_robot != 0:
-            parameters = MoveToParametersSetDataType()
-            parameters.moveStraight = False
-            parameters.endPosition.point.x = self.X_robot / 1000 # pose has to be in m
-            parameters.endPosition.point.y = self.Y_robot / 1000 # pose has to be in m
-            parameters.endPosition.point.z = 0.035
-            parameters.endPosition.xAxis.i = 0.707
-            parameters.endPosition.xAxis.j = 0.707
-            parameters.endPosition.xAxis.k = 0.0
-            parameters.endPosition.zAxis.i = 0.0
-            parameters.endPosition.zAxis.j = 0.0
-            parameters.endPosition.zAxis.k = -1.0
+            parameters = ua.CRCL_PoseDataType()
+           #parameters = ua.MoveToParamsSetDataType()
+
+            parameters.point.x = self.X_robot / 1000 # pose has to be in m
+            parameters.point.y = self.Y_robot / 1000 # pose has to be in m
+            parameters.point.z = 0.035
+            parameters.xAxis.i = 0.707
+            parameters.xAxis.j = 0.707
+            parameters.xAxis.k = 0.0
+            parameters.zAxis.i = 0.0
+            parameters.zAxis.j = 0.0
+            parameters.zAxis.k = -1.0
             pub.sendMessage("write_information_source", name="CameraPose", data=parameters)
         pub.sendMessage("write_information_source", name="YellowPartDetected", data=self.yellow)
         pub.sendMessage("write_information_source", name="GreyPartDetected", data=self.grey)        

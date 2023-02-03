@@ -46,6 +46,8 @@ class SAMY_Robot():
             else:
                 self.logger.error("Sensor type not valid!!")
 
+        time.sleep(1)
+
 
 
         #pub.sendMessage("write_information_source", name="LightBarrier", data=bool(self.mqtt.lightbarrier_value))

@@ -42,7 +42,7 @@ class RobotSettings:
 class SAMY_Robot():
     def __init__(self, global_settings):
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
+        self.logger.setLevel(logging.DEBUG)
         log_handler = logging.StreamHandler()
         log_handler.setFormatter(logging.Formatter("%(levelname)s %(filename)s - %(message)s"))
         self.logger.addHandler(log_handler)
@@ -72,6 +72,8 @@ class SAMY_Robot():
 
     def move_to(self, data):
         self.logger.info("Got MoveTo")
+        self.logger.debug("Printing CRCL End Pose of moveTo command")
+        self.logger.debug(data.endPosition)
         trans = self.crcl_pose_to_m3d_pose(data.endPosition)
 
         if data.moveStraight:
